@@ -1,0 +1,25 @@
+<idea-plugin>
+    <id>com.github.xxx.LpcLanguage</id>
+    <name>LPC</name>
+    <vendor email="mpd@yjesters-court.net" url="https://github.com/xxx">mpd</vendor>
+
+    <description><![CDATA[
+    Syntax and refactoring Support for the LPC Language
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="LPC file" implementationClass="com.github.xxx.lpc.LPCFileType" fieldName="INSTANCE"
+                  language="LPC" extensions="c"/>
+        <lang.parserDefinition language="LPC" implementationClass="com.github.xxx.lpc.LPCParserDefinition"/>
+    </extensions>
+
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
