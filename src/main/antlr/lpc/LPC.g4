@@ -266,6 +266,10 @@ SemiColon
     :   ';'
     ;
 
+Comma
+    :   ','
+    ;
+
 Number
     :   IntegerConstant
     ;
@@ -553,7 +557,7 @@ member_list
 
 member_name_list
     :   member_name
-    |   member_name ',' member_name_list
+    |   member_name Comma member_name_list
     ;
 
 member_name
@@ -562,7 +566,7 @@ member_name
 
 name_list
     :   new_name
-    |   new_name ',' name_list
+    |   new_name Comma name_list
     ;
 
 new_name
@@ -615,20 +619,20 @@ expr_or_block
 
 comma_expr
     :   expr0
-    |   comma_expr ',' expr0
+    |   comma_expr Comma expr0
     ;
 
 parse_command
-    :   ParseCommand LeftParen expr0 ',' expr0 ',' expr0 lvalue_list RightParen
+    :   ParseCommand LeftParen expr0 Comma expr0 Comma expr0 lvalue_list RightParen
     ;
 
 sscanf
-    :   SScanf LeftParen expr0 ',' expr0 lvalue_list RightParen
+    :   SScanf LeftParen expr0 Comma expr0 lvalue_list RightParen
     ;
 
 lvalue_list
     :   /* empty */
-    |   ',' expr4 lvalue_list
+    |   Comma expr4 lvalue_list
     ;
 
 cast
@@ -666,7 +670,7 @@ expr4
     |   catch_statement
     |   BasicType LeftParen argument RightParen block
 //    |   L_NEW_FUNCTION_OPEN ':' RightParen
-//    |   L_NEW_FUNCTION_OPEN ',' expr_list2 ':' RightParen
+//    |   L_NEW_FUNCTION_OPEN Comma expr_list2 ':' RightParen
     |   FunctionOpen comma_expr ':' RightParen
     |   MappingOpen expr_list3 MappingClose
     |   ArrayOpen expr_list ArrayClose
@@ -679,18 +683,18 @@ catch_statement
 expr_list
     :   /* empty */
     |   expr_list2
-    |   expr_list2 ','
+    |   expr_list2 Comma
     ;
 
 expr_list3
     :   /* empty */
     |   expr_list4
-    |   expr_list4 ','
+    |   expr_list4 Comma
     ;
 
 expr_list4
     :   assoc_pair
-    |   expr_list4 ',' assoc_pair
+    |   expr_list4 Comma assoc_pair
     ;
 
 assoc_pair
@@ -699,7 +703,7 @@ assoc_pair
 
 expr_list2
     :   expr_list_node
-    |   expr_list2 ',' expr_list_node
+    |   expr_list2 Comma expr_list_node
     ;
 
 expr_list_node
@@ -750,7 +754,7 @@ function_name
 
 opt_class_init
     :   /* empty */
-    |   opt_class_init ',' class_init
+    |   opt_class_init Comma class_init
     ;
 
 class_init
@@ -783,7 +787,7 @@ local_declare_statement
 
 local_name_list
     :   new_local_def
-    |   new_local_def ',' local_name_list
+    |   new_local_def Comma local_name_list
     ;
 
 new_local_def
@@ -883,12 +887,12 @@ constant
 foreach_loop
     :   Foreach LeftParen foreach_vars In expr0 RightParen statement
     |   Foreach LeftParen single_new_local_def ':' expr0 RightParen statement
-    |   Foreach LeftParen single_new_local_def ',' single_new_local_def ':' expr0 RightParen statement
+    |   Foreach LeftParen single_new_local_def Comma single_new_local_def ':' expr0 RightParen statement
     ;
 
 foreach_vars
     :   foreach_var
-    |   foreach_var ',' foreach_var
+    |   foreach_var Comma foreach_var
     ;
 
 for_loop
@@ -941,7 +945,7 @@ argument
 
 argument_list
     :   new_arg
-    |   argument_list ',' new_arg
+    |   argument_list Comma new_arg
     ;
 
 new_arg

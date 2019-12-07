@@ -98,6 +98,7 @@ class LPCSyntaxHighlighter : SyntaxHighlighterBase() {
             LPCLexer.Great,
             LPCLexer.GreatEqual,
             LPCLexer.Range,
+            LPCLexer.Comma,
             LPCLexer.ColonColon -> OPERATOR
 
             LPCLexer.LeftParen,
