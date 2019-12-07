@@ -2,6 +2,7 @@ package com.github.xxx.lpc
 
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
+import com.intellij.openapi.editor.HighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.tree.IElementType
@@ -32,6 +33,9 @@ class LPCSyntaxHighlighter : SyntaxHighlighterBase() {
                 DefaultLanguageHighlighterColors.BRACKETS)
         val SEMICOLON = TextAttributesKey.createTextAttributesKey("LPC_SEMICOLON",
                 DefaultLanguageHighlighterColors.SEMICOLON)
+        val BAD_CHARS = TextAttributesKey.createTextAttributesKey("LPC_BAD_CHARS",
+                HighlighterColors.BAD_CHARACTER)
+
         init {
             PSIElementTypeFactory.defineLanguageIElementTypes(LPCLanguage.INSTANCE,
                     LPCParser.tokenNames,
@@ -110,6 +114,8 @@ class LPCSyntaxHighlighter : SyntaxHighlighterBase() {
             LPCLexer.Real -> NUMBER
             LPCLexer.LineComment -> LINE_COMMENT
             LPCLexer.BlockComment -> BLOCK_COMMENT
+
+            LPCLexer.BadChar -> BAD_CHARS
             else -> return EMPTY_KEYS
         }
         return arrayOf(attrKey)

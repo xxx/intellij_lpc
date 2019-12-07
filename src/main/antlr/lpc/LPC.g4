@@ -222,8 +222,16 @@ MappingOpen
     :   LeftParen (Whitespace|Newline)* LeftBracket
     ;
 
+MappingClose
+    :   RightBracket (Whitespace|Newline)* RightParen
+    ;
+
 ArrayOpen
     :   LeftParen (Whitespace|Newline)* LeftBrace
+    ;
+
+ArrayClose
+    :   RightBrace (Whitespace|Newline)* RightParen
     ;
 
 FunctionOpen
@@ -491,6 +499,10 @@ Newline
         -> channel(HIDDEN)
     ;
 
+BadChar
+    : .
+      -> channel(HIDDEN)
+    ;
 
 lpc_program
     :   program EOF
@@ -656,8 +668,8 @@ expr4
 //    |   L_NEW_FUNCTION_OPEN ':' RightParen
 //    |   L_NEW_FUNCTION_OPEN ',' expr_list2 ':' RightParen
     |   FunctionOpen comma_expr ':' RightParen
-    |   MappingOpen expr_list3 RightBracket RightParen
-    |   ArrayOpen expr_list RightBrace RightParen
+    |   MappingOpen expr_list3 MappingClose
+    |   ArrayOpen expr_list ArrayClose
     ;
 
 catch_statement
