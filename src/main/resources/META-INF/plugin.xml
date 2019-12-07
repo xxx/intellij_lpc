@@ -16,6 +16,8 @@
         <fileType name="LPC file" implementationClass="com.github.xxx.lpc.LPCFileType" fieldName="INSTANCE"
                   language="LPC" extensions="c"/>
         <lang.parserDefinition language="LPC" implementationClass="com.github.xxx.lpc.LPCParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="LPC" implementationClass="com.github.xxx.lpc.LPCSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="com.github.xxx.lpc.LPCColorSettingsPage"/>
     </extensions>
 
 

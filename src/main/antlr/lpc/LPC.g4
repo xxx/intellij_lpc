@@ -219,15 +219,43 @@ SScanf
     ;
 
 MappingOpen
-    :   '(' (Whitespace|Newline)* '['
+    :   LeftParen (Whitespace|Newline)* LeftBracket
     ;
 
 ArrayOpen
-    :   '(' (Whitespace|Newline)* '{'
+    :   LeftParen (Whitespace|Newline)* LeftBrace
     ;
 
 FunctionOpen
-    :   '(' Whitespace* ':' {_input.LA(1) != ':'}?    // java
+    :   LeftParen Whitespace* ':' {_input.LA(1) != ':'}?    // java
+    ;
+
+LeftParen
+    :   '('
+    ;
+
+RightParen
+    :   ')'
+    ;
+
+LeftBrace
+    :   '{'
+    ;
+
+RightBrace
+    :   '}'
+    ;
+
+LeftBracket
+    :   '['
+    ;
+
+RightBracket
+    :   ']'
+    ;
+
+SemiColon
+    :   ';'
     ;
 
 Number
@@ -241,17 +269,17 @@ Parameter
 /* Pre processing */
 ComplexDefine
     :   '#' Whitespace* 'define' (~[\\\r\n] | '\\\\' '\r'? '\n' | '\\'. )*
-        -> channel(HIDDEN)
+//        -> channel(HIDDEN)
     ;
 
 ComplexInclude
     :   '#' Whitespace* 'include'  ~[\r\n]*
-        -> channel(HIDDEN)
+//        -> channel(HIDDEN)
     ;
 
 ComplexPreprocessor
     :   '#' ~[\r\n]*
-        -> channel(HIDDEN)
+//        -> channel(HIDDEN)
     ;
 
 Real
@@ -475,19 +503,22 @@ program
 
 possible_semi_colon
     :   /* empty */
-    |   ';'
+    |   SemiColon
     ;
 
 definition
     :   function_definition
-    |   data_type name_list ';'
+    |   data_type name_list SemiColon
     |   inheritance
     |   type_decl
     |   modifier_change
+    |   ComplexPreprocessor
+    |   ComplexDefine
+    |   ComplexInclude
     ;
 
 function_definition
-    :   data_type optional_star identifier '(' argument ')' block_or_semi
+    :   data_type optional_star identifier LeftParen argument RightParen block_or_semi
     ;
 
 modifier_change
@@ -500,12 +531,12 @@ type_modifier_list
     ;
 
 type_decl
-    :   type_modifier_list Class identifier '{' member_list '}'
+    :   type_modifier_list Class identifier LeftBrace member_list RightBrace
     ;
 
 member_list
     :   /* empty */
-    |   member_list data_type member_name_list ';'
+    |   member_list data_type member_name_list SemiColon
     ;
 
 member_name_list
@@ -567,7 +598,7 @@ time_expression
 
 expr_or_block
     :   block
-    |   '(' comma_expr ')'
+    |   LeftParen comma_expr RightParen
     ;
 
 comma_expr
@@ -576,11 +607,11 @@ comma_expr
     ;
 
 parse_command
-    :   ParseCommand '(' expr0 ',' expr0 ',' expr0 lvalue_list ')'
+    :   ParseCommand LeftParen expr0 ',' expr0 ',' expr0 lvalue_list RightParen
     ;
 
 sscanf
-    :   SScanf '(' expr0 ',' expr0 lvalue_list ')'
+    :   SScanf LeftParen expr0 ',' expr0 lvalue_list RightParen
     ;
 
 lvalue_list
@@ -589,7 +620,7 @@ lvalue_list
     ;
 
 cast
-    :   '(' basic_type optional_star ')'
+    :   LeftParen basic_type optional_star RightParen
     ;
 
 basic_type
@@ -607,26 +638,26 @@ expr4
     |   DefinedName
     |   Identifier
     |   Parameter
-    |   '$' '(' comma_expr ')'
+    |   '$' LeftParen comma_expr RightParen
     |   expr4 Arrow identifier
-    |   expr4 '[' comma_expr Range '<' comma_expr ']'
-    |   expr4 '[' comma_expr Range comma_expr ']'
-    |   expr4 '[' '<' comma_expr Range comma_expr ']'
-    |   expr4 '[' '<' comma_expr Range '<' comma_expr ']'
-    |   expr4 '[' comma_expr Range ']'
-    |   expr4 '[' '<' comma_expr Range ']'
-    |   expr4 '[' '<' comma_expr ']'
-    |   expr4 '[' comma_expr ']'
+    |   expr4 LeftBracket comma_expr Range '<' comma_expr RightBracket
+    |   expr4 LeftBracket comma_expr Range comma_expr RightBracket
+    |   expr4 LeftBracket '<' comma_expr Range comma_expr RightBracket
+    |   expr4 LeftBracket '<' comma_expr Range '<' comma_expr RightBracket
+    |   expr4 LeftBracket comma_expr Range RightBracket
+    |   expr4 LeftBracket '<' comma_expr Range RightBracket
+    |   expr4 LeftBracket '<' comma_expr RightBracket
+    |   expr4 LeftBracket comma_expr RightBracket
     |   string
     |   CharacterConstant
-    |   '(' comma_expr ')'
+    |   LeftParen comma_expr RightParen
     |   catch_statement
-    |   BasicType '(' argument ')' block
-//    |   L_NEW_FUNCTION_OPEN ':' ')'
-//    |   L_NEW_FUNCTION_OPEN ',' expr_list2 ':' ')'
-    |   FunctionOpen comma_expr ':' ')'
-    |   MappingOpen expr_list3 ']' ')'
-    |   ArrayOpen expr_list '}' ')'
+    |   BasicType LeftParen argument RightParen block
+//    |   L_NEW_FUNCTION_OPEN ':' RightParen
+//    |   L_NEW_FUNCTION_OPEN ',' expr_list2 ':' RightParen
+    |   FunctionOpen comma_expr ':' RightParen
+    |   MappingOpen expr_list3 RightBracket RightParen
+    |   ArrayOpen expr_list RightBrace RightParen
     ;
 
 catch_statement
@@ -675,27 +706,27 @@ string_con2
 
 string_con1
     :   string_con2
-    |   '(' string_con1 ')'
+    |   LeftParen string_con1 RightParen
     |   string_con1 '+' string_con1
     ;
 
 // combine into expr4
 function_call
-    :   efun_override '(' expr_list ')'
-    |   New '(' expr_list ')'
-    |   New '(' Class DefinedName opt_class_init ')'
-    |   DefinedName '(' expr_list ')'
-    |   function_name_call  //function_name '(' expr_list ')'
-    |   function_arrow_call //expr4 Arrow identifier '(' expr_list ')'
-    |   '(' '*' comma_expr ')' '(' expr_list ')'
+    :   efun_override LeftParen expr_list RightParen
+    |   New LeftParen expr_list RightParen
+    |   New LeftParen Class DefinedName opt_class_init RightParen
+    |   DefinedName LeftParen expr_list RightParen
+    |   function_name_call  //function_name LeftParen expr_list RightParen
+    |   function_arrow_call //expr4 Arrow identifier LeftParen expr_list RightParen
+    |   LeftParen '*' comma_expr RightParen LeftParen expr_list RightParen
     ;
 
 function_name_call
-    :   function_name '(' expr_list ')'
+    :   function_name LeftParen expr_list RightParen
     ;
 
 function_arrow_call
-    :   Arrow identifier '(' expr_list ')'
+    :   Arrow identifier LeftParen expr_list RightParen
     ;
 
 function_name
@@ -721,11 +752,11 @@ efun_override
 
 block_or_semi
     :   block
-    |   ';'
+    |   SemiColon
     ;
 
 block
-    :   '{' statements '}'
+    :   LeftBrace statements RightBrace
     ;
 
 statements
@@ -735,7 +766,7 @@ statements
     ;
 
 local_declare_statement
-    :   basic_type local_name_list ';'
+    :   basic_type local_name_list SemiColon
     ;
 
 local_name_list
@@ -754,7 +785,7 @@ new_local_name
     ;
 
 statement
-    :   comma_expr ';'
+    :   comma_expr SemiColon
     |   cond
     |   while_statement
     |   do_statement
@@ -766,26 +797,26 @@ statement
     |   for_loop
     |   foreach_loop
 
-    |   /* empty */ ';'
-    |   Break ';'
-    |   Continue ';'
+    |   /* empty */ SemiColon
+    |   Break SemiColon
+    |   Continue SemiColon
     ;
 
 while_statement
-    :   While '(' comma_expr ')' statement
+    :   While LeftParen comma_expr RightParen statement
     ;
 
 do_statement
-    :   Do statement While '(' comma_expr ')' ';'
+    :   Do statement While LeftParen comma_expr RightParen SemiColon
     ;
 
 switch_statement
-    :   Switch '(' comma_expr ')' '{' local_declarations case_statement switch_block '}'
+    :   Switch LeftParen comma_expr RightParen LeftBrace local_declarations case_statement switch_block RightBrace
     ;
 
 local_declarations
     :   /* empty */
-    |   local_declarations basic_type local_name_list ';'
+    |   local_declarations basic_type local_name_list SemiColon
     ;
 
 case_statement
@@ -816,7 +847,7 @@ constant
     |   constant '<' constant
     |   constant LeftShift constant
     |   constant RightShift constant
-    |   '(' constant ')'
+    |   LeftParen constant RightParen
 
     |   constant '*' constant
     |   constant '%' constant
@@ -838,7 +869,9 @@ constant
 //    ;
 
 foreach_loop
-    :   Foreach '(' foreach_vars In expr0 ')' statement
+    :   Foreach LeftParen foreach_vars In expr0 RightParen statement
+    |   Foreach LeftParen single_new_local_def ':' expr0 RightParen statement
+    |   Foreach LeftParen single_new_local_def ',' single_new_local_def ':' expr0 RightParen statement
     ;
 
 foreach_vars
@@ -847,7 +880,7 @@ foreach_vars
     ;
 
 for_loop
-    :   For '(' first_for_expr ';' for_expr ';' for_expr ')' statement
+    :   For LeftParen first_for_expr SemiColon for_expr SemiColon for_expr RightParen statement
     ;
 
 foreach_var
@@ -875,12 +908,12 @@ for_expr
     ;
 
 returnStatement
-    :   Return ';'
-    |   Return comma_expr ';'
+    :   Return SemiColon
+    |   Return comma_expr SemiColon
     ;
 
 cond
-    :   If '(' comma_expr ')' statement optional_else_part
+    :   If LeftParen comma_expr RightParen statement optional_else_part
     ;
 
 optional_else_part
@@ -906,7 +939,8 @@ new_arg
     ;
 
 inheritance
-    :   type_modifier_list Inherit string_con1 ';'
+    :   type_modifier_list Inherit string_con1 SemiColon
+    |   type_modifier_list Inherit string_con1 Identifier SemiColon
     ;
 
 data_type

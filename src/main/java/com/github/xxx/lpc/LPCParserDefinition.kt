@@ -17,7 +17,6 @@ import lpc.LPCParser
 import org.antlr.intellij.adaptor.lexer.ANTLRLexerAdaptor
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory.createTokenSet
-import org.antlr.intellij.adaptor.lexer.TokenIElementType
 import org.antlr.intellij.adaptor.parser.ANTLRParserAdaptor
 import org.antlr.intellij.adaptor.psi.ANTLRPsiNode
 import org.antlr.v4.runtime.Parser
@@ -26,7 +25,6 @@ import org.antlr.v4.runtime.tree.ParseTree
 class LPCParserDefinition : ParserDefinition {
     companion object {
         val FILE = IFileElementType(LPCLanguage.INSTANCE)
-//        lateinit var ID : TokenIElementType
 
         init {
             PSIElementTypeFactory.defineLanguageIElementTypes(LPCLanguage.INSTANCE,
@@ -34,8 +32,6 @@ class LPCParserDefinition : ParserDefinition {
                     LPCLexer.tokenNames,
                     LPCParser.ruleNames
             )
-//            val tokenIElementTypes = PSIElementTypeFactory.getTokenIElementTypes(LPCLanguage.INSTANCE)
-//            ID = tokenIElementTypes.get(LPCLexer.Identifier)
         }
 
 
@@ -64,11 +60,6 @@ class LPCParserDefinition : ParserDefinition {
         return object : ANTLRParserAdaptor(LPCLanguage.INSTANCE, parser) {
             override fun parse(parser: Parser, root: IElementType): ParseTree {
                 return (parser as LPCParser).lpc_program()
-                // start rule depends on root passed in; sometimes we want to create an ID node etc...
-//                return if (root is IFileElementType) {
-//                    (parser as LPCParser).script()
-//                } else (parser as LPCParser).primary()
-                // let's hope it's an ID as needed by "rename function"
             }
         }
     }
@@ -97,10 +88,6 @@ class LPCParserDefinition : ParserDefinition {
     override fun spaceExistanceTypeBetweenTokens(left: ASTNode, right: ASTNode): ParserDefinition.SpaceRequirements {
         return ParserDefinition.SpaceRequirements.MAY
     }
-
-//    override fun createElement(node: ASTNode): PsiElement {
-//        return PsiElementFactory.createElement(node)
-//    }
 
     /** What is the IFileElementType of the root parse tree node? It
      * is called from [.createFile] at least.
