@@ -70,8 +70,8 @@ NotEqual
     ;
 
 Compare
-    //:   '<'
-    :   LessEqual
+    :   Less
+    |   LessEqual
     |   Great
     |   GreatEqual
     ;
@@ -79,9 +79,9 @@ Compare
 /*
     [1..<1] did not allow Less
 */
-//Less
-//    :   '<'
-//    ;
+Less
+    :   '<'
+    ;
 
 LessEqual
     :   '<='

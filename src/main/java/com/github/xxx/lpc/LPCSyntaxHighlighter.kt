@@ -93,6 +93,7 @@ class LPCSyntaxHighlighter : SyntaxHighlighterBase() {
             LPCLexer.Not,
             LPCLexer.NotEqual,
             LPCLexer.Compare,
+            LPCLexer.Less,
             LPCLexer.LessEqual,
             LPCLexer.Great,
             LPCLexer.GreatEqual,
