@@ -534,7 +534,20 @@ definition
     ;
 
 function_definition
-    :   data_type optional_star identifier LeftParen argument RightParen block_or_semi
+    :   function_implementation
+    |   function_prototype
+    ;
+
+function_implementation
+    :   function_decl block
+    ;
+
+function_prototype
+    :   function_decl SemiColon
+    ;
+
+function_decl
+    :   data_type optional_star identifier LeftParen argument RightParen
     ;
 
 modifier_change
@@ -764,11 +777,6 @@ class_init
 efun_override
     :   Efun ColonColon identifier
     |   Efun ColonColon New
-    ;
-
-block_or_semi
-    :   block
-    |   SemiColon
     ;
 
 block
