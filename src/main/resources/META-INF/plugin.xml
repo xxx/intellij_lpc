@@ -18,6 +18,7 @@
         <lang.parserDefinition language="LPC" implementationClass="com.github.xxx.lpc.LPCParserDefinition"/>
         <lang.syntaxHighlighterFactory language="LPC" implementationClass="com.github.xxx.lpc.LPCSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.github.xxx.lpc.LPCColorSettingsPage"/>
+<!--        <annotator language="LPC" implementationClass="com.github.xxx.lpc.LPCAnnotator"/>-->
     </extensions>
 
 
