@@ -12,6 +12,7 @@ plugins {
     id 'antlr'
     id 'nebula.lint' version '16.0.2'
     id 'idea'
+    id "org.jlleitschuh.gradle.ktlint-idea" version "9.1.1"
 }
 
 gradleLint.rules = ['all-dependency', 'archaic-wrapper']
