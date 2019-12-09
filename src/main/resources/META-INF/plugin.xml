@@ -23,6 +23,7 @@
         <lang.commenter language="LPC" implementationClass="com.github.xxx.lpc.LPCCommenter"/>
         <lang.braceMatcher language="LPC" implementationClass="com.github.xxx.lpc.LPCBraceMatcher" />
         <lang.foldingBuilder language="LPC" implementationClass="com.github.xxx.lpc.LPCFoldingBuilder" />
+        <lang.psiStructureViewFactory language="LPC" implementationClass="com.github.xxx.lpc.structure.LPCStructureViewFactory"/>
     </extensions>
 
 
