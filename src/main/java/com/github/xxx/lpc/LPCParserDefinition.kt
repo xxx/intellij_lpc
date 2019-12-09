@@ -17,6 +17,7 @@ import lpc.LPCParser
 import org.antlr.intellij.adaptor.lexer.ANTLRLexerAdaptor
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory.createTokenSet
+import org.antlr.intellij.adaptor.lexer.TokenIElementType
 import org.antlr.intellij.adaptor.parser.ANTLRParserAdaptor
 import org.antlr.intellij.adaptor.psi.ANTLRPsiNode
 import org.antlr.v4.runtime.Parser
@@ -48,6 +49,8 @@ class LPCParserDefinition : ParserDefinition {
         val STRING = createTokenSet(
                 LPCLanguage.INSTANCE,
                 LPCLexer.String)!!
+
+        val tokens: List<TokenIElementType> = PSIElementTypeFactory.getTokenIElementTypes(LPCLanguage.INSTANCE)
     }
 
     override fun createLexer(project: Project): Lexer {

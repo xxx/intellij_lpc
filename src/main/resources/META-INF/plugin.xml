@@ -21,6 +21,7 @@
 <!--        <annotator language="LPC" implementationClass="com.github.xxx.lpc.LPCAnnotator"/>-->
 <!--        <codeInsight.lineMarkerProvider language="LPC" implementationClass="com.github.xxx.lpc.LPCLineMarkerProvider"/>-->
         <lang.commenter language="LPC" implementationClass="com.github.xxx.lpc.LPCCommenter"/>
+        <lang.braceMatcher language="LPC" implementationClass="com.github.xxx.lpc.LPCBraceMatcher" />
     </extensions>
 
 

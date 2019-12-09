@@ -218,21 +218,23 @@ SScanf
     :   'sscanf'
     ;
 
-MappingOpen
-    :   LeftParen (Whitespace|Newline)* LeftBracket
-    ;
-
-MappingClose
-    :   RightBracket (Whitespace|Newline)* RightParen
-    ;
-
-ArrayOpen
-    :   LeftParen (Whitespace|Newline)* LeftBrace
-    ;
-
-ArrayClose
-    :   RightBrace (Whitespace|Newline)* RightParen
-    ;
+// These make brace matching more difficult, as intellij doesn't know to
+// skip over the first char of a closing multi-char match when typing it
+//MappingOpen
+//    :   LeftParen (Whitespace|Newline)* LeftBracket
+//    ;
+//
+//MappingClose
+//    :   RightBracket (Whitespace|Newline)* RightParen
+//    ;
+//
+//ArrayOpen
+//    :   LeftParen (Whitespace|Newline)* LeftBrace
+//    ;
+//
+//ArrayClose
+//    :   RightBrace (Whitespace|Newline)* RightParen
+//    ;
 
 FunctionOpen
     :   LeftParen Whitespace* ':' {_input.LA(1) != ':'}?    // java
@@ -685,8 +687,8 @@ expr4
 //    |   L_NEW_FUNCTION_OPEN ':' RightParen
 //    |   L_NEW_FUNCTION_OPEN Comma expr_list2 ':' RightParen
     |   FunctionOpen comma_expr ':' RightParen
-    |   MappingOpen expr_list3 MappingClose
-    |   ArrayOpen expr_list ArrayClose
+    |   LeftParen LeftBracket expr_list3 RightBracket RightParen
+    |   LeftParen LeftBrace expr_list RightBrace RightParen
     ;
 
 catch_statement
