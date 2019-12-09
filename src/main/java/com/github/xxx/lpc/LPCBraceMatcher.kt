@@ -21,14 +21,5 @@ class LPCBraceMatcher : PairedBraceMatcher {
           )
      }
 
-     override fun getCodeConstructStart(file: PsiFile?, openingBraceOffset: Int): Int {
-          if (file == null) {
-               return openingBraceOffset
-          }
-
-          val element = file.findElementAt(openingBraceOffset)
-          println(element)
-
-          return openingBraceOffset
-     }
+     override fun getCodeConstructStart(file: PsiFile?, openingBraceOffset: Int): Int = openingBraceOffset
 }
