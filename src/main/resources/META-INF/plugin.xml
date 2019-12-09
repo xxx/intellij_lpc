@@ -19,6 +19,8 @@
         <lang.syntaxHighlighterFactory language="LPC" implementationClass="com.github.xxx.lpc.LPCSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.github.xxx.lpc.LPCColorSettingsPage"/>
 <!--        <annotator language="LPC" implementationClass="com.github.xxx.lpc.LPCAnnotator"/>-->
+<!--        <codeInsight.lineMarkerProvider language="LPC" implementationClass="com.github.xxx.lpc.LPCLineMarkerProvider"/>-->
+        <lang.commenter language="LPC" implementationClass="com.github.xxx.lpc.LPCCommenter"/>
     </extensions>
 
 
