@@ -3,6 +3,7 @@ package com.github.xxx.lpc
 import com.github.xxx.lpc.psi.ArgDefSubtree
 import com.github.xxx.lpc.psi.BlockSubtree
 import com.github.xxx.lpc.psi.CallSubtree
+import com.github.xxx.lpc.psi.FunctionDeclSubtree
 import com.github.xxx.lpc.psi.FunctionDefSubtree
 import com.github.xxx.lpc.psi.LPCPSIFileRoot
 import com.github.xxx.lpc.psi.VarDefSubtree
@@ -100,6 +101,7 @@ class LPCParserDefinition : ParserDefinition {
             LPCParser.RULE_single_new_local_def,
             LPCParser.RULE_single_new_local_def_with_init,
             LPCParser.RULE_new_local_def  -> VarDefSubtree(node, elType)
+            LPCParser.RULE_function_decl -> FunctionDeclSubtree(node)
             LPCParser.RULE_new_arg -> ArgDefSubtree(node, elType)
             LPCParser.RULE_block -> BlockSubtree(node)
             LPCParser.RULE_function_call -> CallSubtree(node)
