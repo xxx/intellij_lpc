@@ -35,8 +35,8 @@ class LPCPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
     override fun resolve(element: PsiNamedElement): PsiElement? {
         return if (element.parent is CallSubtree) {
             SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
-                    element, "/script/function/ID")
+                    element, "//function_definition//identifier")
         } else SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
-                element, "/script/vardef/ID")
+                element, "//name_list//identifier")
     }
 }
