@@ -98,6 +98,7 @@ class LPCParserDefinition : ParserDefinition {
 
         return when (elType.ruleIndex) {
             LPCParser.RULE_function_definition -> FunctionDefSubtree(node, elType)
+            LPCParser.RULE_new_name,
             LPCParser.RULE_single_new_local_def,
             LPCParser.RULE_single_new_local_def_with_init,
             LPCParser.RULE_new_local_def  -> VarDefSubtree(node, elType)
