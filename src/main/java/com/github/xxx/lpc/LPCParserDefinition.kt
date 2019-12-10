@@ -1,6 +1,11 @@
 package com.github.xxx.lpc
 
+import com.github.xxx.lpc.psi.ArgDefSubtree
+import com.github.xxx.lpc.psi.BlockSubtree
+import com.github.xxx.lpc.psi.CallSubtree
+import com.github.xxx.lpc.psi.FunctionDefSubtree
 import com.github.xxx.lpc.psi.LPCPSIFileRoot
+import com.github.xxx.lpc.psi.VarDefSubtree
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.lang.PsiParser
@@ -17,6 +22,7 @@ import lpc.LPCParser
 import org.antlr.intellij.adaptor.lexer.ANTLRLexerAdaptor
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory.createTokenSet
+import org.antlr.intellij.adaptor.lexer.RuleIElementType
 import org.antlr.intellij.adaptor.lexer.TokenIElementType
 import org.antlr.intellij.adaptor.parser.ANTLRParserAdaptor
 import org.antlr.intellij.adaptor.psi.ANTLRPsiNode
@@ -81,7 +87,24 @@ class LPCParserDefinition : ParserDefinition {
     }
 
     override fun createElement(node: ASTNode?): PsiElement {
-        return ANTLRPsiNode(node!!)
+        val elType = node!!.elementType
+        if (elType is TokenIElementType) {
+            return ANTLRPsiNode(node)
+        }
+        if (elType !is RuleIElementType) {
+            return ANTLRPsiNode(node)
+        }
+
+        return when (elType.ruleIndex) {
+            LPCParser.RULE_function_definition -> FunctionDefSubtree(node, elType)
+            LPCParser.RULE_single_new_local_def,
+            LPCParser.RULE_single_new_local_def_with_init,
+            LPCParser.RULE_new_local_def  -> VarDefSubtree(node, elType)
+            LPCParser.RULE_new_arg -> ArgDefSubtree(node, elType)
+            LPCParser.RULE_block -> BlockSubtree(node)
+            LPCParser.RULE_function_call -> CallSubtree(node)
+            else -> ANTLRPsiNode(node)
+        }
     }
 
     override fun createFile(viewProvider: FileViewProvider): PsiFile {
