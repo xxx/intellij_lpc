@@ -55,8 +55,7 @@ class LPCSyntaxHighlighter : SyntaxHighlighterBase() {
         attrKey = when (ttype) {
             LPCLexer.Identifier -> ID
 
-            LPCLexer.ComplexDefine,
-            LPCLexer.CharacterConstant -> CONSTANT
+            LPCLexer.ComplexDefine -> CONSTANT
 
             LPCLexer.BasicType,
             LPCLexer.TypeModifier,
@@ -111,9 +110,13 @@ class LPCSyntaxHighlighter : SyntaxHighlighterBase() {
             LPCLexer.RightBracket -> BRACKETS
 
             LPCLexer.SemiColon -> SEMICOLON
+
+            LPCLexer.CharacterConstant,
             LPCLexer.String -> STRING
+
             LPCLexer.Number,
             LPCLexer.Real -> NUMBER
+
             LPCLexer.LineComment -> LINE_COMMENT
             LPCLexer.BlockComment -> BLOCK_COMMENT
 
