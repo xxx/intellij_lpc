@@ -4,7 +4,8 @@ import com.github.xxx.lpc.psi.ArgDefSubtree
 import com.github.xxx.lpc.psi.BlockSubtree
 import com.github.xxx.lpc.psi.CallSubtree
 import com.github.xxx.lpc.psi.FunctionDeclSubtree
-import com.github.xxx.lpc.psi.FunctionDefSubtree
+import com.github.xxx.lpc.psi.FunctionImplementationSubtree
+import com.github.xxx.lpc.psi.FunctionPrototypeSubtree
 import com.github.xxx.lpc.psi.LPCPSIFileRoot
 import com.github.xxx.lpc.psi.VarDefSubtree
 import com.intellij.lang.ASTNode
@@ -97,7 +98,8 @@ class LPCParserDefinition : ParserDefinition {
         }
 
         return when (elType.ruleIndex) {
-            LPCParser.RULE_function_definition -> FunctionDefSubtree(node, elType)
+            LPCParser.RULE_function_prototype -> FunctionPrototypeSubtree(node)
+            LPCParser.RULE_function_implementation -> FunctionImplementationSubtree(node, elType)
             LPCParser.RULE_new_name,
             LPCParser.RULE_single_new_local_def,
             LPCParser.RULE_single_new_local_def_with_init,

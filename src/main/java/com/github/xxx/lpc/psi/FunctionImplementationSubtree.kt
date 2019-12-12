@@ -12,7 +12,7 @@ import org.antlr.intellij.adaptor.psi.ScopeNode
 /** A subtree associated with a function definition.
  * Its scope is the set of arguments.
  */
-class FunctionDefSubtree(node: ASTNode, idElementType: IElementType) :
+class FunctionImplementationSubtree(node: ASTNode, idElementType: IElementType) :
     IdentifierDefSubtree(node, idElementType), ScopeNode {
     override fun resolve(element: PsiNamedElement): PsiElement? {
         //		System.out.println(getClass().getSimpleName()+
@@ -20,7 +20,7 @@ class FunctionDefSubtree(node: ASTNode, idElementType: IElementType) :
         //			                   " at "+Integer.toHexString(myElement.hashCode())+")");
         return SymtabUtils.resolve(
             this, LPCLanguage.INSTANCE,
-            element, "//function_definition//identifier"
+            element, "//function_implementation//identifier"
         )
     }
 }
