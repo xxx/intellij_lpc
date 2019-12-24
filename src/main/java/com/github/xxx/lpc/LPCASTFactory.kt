@@ -15,15 +15,6 @@ import org.antlr.intellij.adaptor.lexer.TokenIElementType
  * to override.
  */
 class LPCASTFactory : DefaultASTFactoryImpl() {
-    /** Create an internal parse tree node. FileElement for root or a parse tree CompositeElement (not
-     * PSI) for the token.
-     * The FileElement is a parse tree node, which is converted to a PsiFile
-     * by [ParserDefinition.createFile].
-     */
-    override fun createComposite(type: IElementType): CompositeElement {
-        return super.createComposite(type)
-    }
-
     /** Create a parse tree (AST) leaf node from a token. Doubles as a PSI leaf node.
      * Does not see whitespace tokens.  Default impl makes [LeafPsiElement]
      * or [PsiCoreCommentImpl] depending on [ParserDefinition.getCommentTokens].
