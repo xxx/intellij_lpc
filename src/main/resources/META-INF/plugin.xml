@@ -19,11 +19,12 @@
         <lang.syntaxHighlighterFactory language="LPC" implementationClass="com.github.xxx.lpc.LPCSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.github.xxx.lpc.LPCColorSettingsPage"/>
 <!--        <annotator language="LPC" implementationClass="com.github.xxx.lpc.LPCAnnotator"/>-->
-<!--        <codeInsight.lineMarkerProvider language="LPC" implementationClass="com.github.xxx.lpc.LPCLineMarkerProvider"/>-->
+        <codeInsight.lineMarkerProvider language="LPC" implementationClass="com.github.xxx.lpc.LPCLineMarkerProvider"/>
         <lang.commenter language="LPC" implementationClass="com.github.xxx.lpc.LPCCommenter"/>
         <lang.braceMatcher language="LPC" implementationClass="com.github.xxx.lpc.LPCBraceMatcher" />
         <lang.foldingBuilder language="LPC" implementationClass="com.github.xxx.lpc.LPCFoldingBuilder" />
         <lang.psiStructureViewFactory language="LPC" implementationClass="com.github.xxx.lpc.structure.LPCStructureViewFactory"/>
+        <lang.ast.factory language="LPC" implementationClass="com.github.xxx.lpc.LPCASTFactory" />
     </extensions>
 
 

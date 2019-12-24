@@ -6,6 +6,7 @@ import com.github.xxx.lpc.psi.CallSubtree
 import com.github.xxx.lpc.psi.FunctionDeclSubtree
 import com.github.xxx.lpc.psi.FunctionImplementationSubtree
 import com.github.xxx.lpc.psi.FunctionPrototypeSubtree
+import com.github.xxx.lpc.psi.IdentifierPSINode
 import com.github.xxx.lpc.psi.LPCPSIFileRoot
 import com.github.xxx.lpc.psi.VarDefSubtree
 import com.intellij.lang.ASTNode
@@ -34,6 +35,7 @@ import org.antlr.v4.runtime.tree.ParseTree
 class LPCParserDefinition : ParserDefinition {
     companion object {
         val FILE = IFileElementType(LPCLanguage.INSTANCE)
+        var ID : TokenIElementType
 
         init {
             PSIElementTypeFactory.defineLanguageIElementTypes(LPCLanguage.INSTANCE,
@@ -41,8 +43,10 @@ class LPCParserDefinition : ParserDefinition {
                     LPCLexer.tokenNames,
                     LPCParser.ruleNames
             )
-        }
 
+            val tokenIElementTypes = PSIElementTypeFactory.getTokenIElementTypes(LPCLanguage.INSTANCE)
+            ID = tokenIElementTypes[LPCLexer.Identifier];
+        }
 
         val COMMENTS = createTokenSet(
                 LPCLanguage.INSTANCE,
@@ -58,7 +62,7 @@ class LPCParserDefinition : ParserDefinition {
                 LPCLanguage.INSTANCE,
                 LPCLexer.String)!!
 
-        val tokens: List<TokenIElementType> = PSIElementTypeFactory.getTokenIElementTypes(LPCLanguage.INSTANCE)
+        val tokens : List<TokenIElementType> = PSIElementTypeFactory.getTokenIElementTypes(LPCLanguage.INSTANCE)
     }
 
     override fun createLexer(project: Project): Lexer {
