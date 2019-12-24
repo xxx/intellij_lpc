@@ -25,6 +25,7 @@
         <lang.foldingBuilder language="LPC" implementationClass="com.github.xxx.lpc.LPCFoldingBuilder" />
         <lang.psiStructureViewFactory language="LPC" implementationClass="com.github.xxx.lpc.structure.LPCStructureViewFactory"/>
         <lang.ast.factory language="LPC" implementationClass="com.github.xxx.lpc.LPCASTFactory" />
+        <completion.contributor language="LPC" implementationClass="com.github.xxx.lpc.LPCCompletionContributor" />
     </extensions>
 
 
