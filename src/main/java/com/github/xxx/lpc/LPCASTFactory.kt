@@ -2,7 +2,6 @@ package com.github.xxx.lpc
 
 import com.github.xxx.lpc.psi.IdentifierPSINode
 import com.intellij.lang.DefaultASTFactoryImpl
-import com.intellij.psi.impl.source.tree.CompositeElement
 import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.tree.IElementType
 import lpc.LPCLexer
