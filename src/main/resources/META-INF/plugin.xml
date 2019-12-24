@@ -1,7 +1,8 @@
 <idea-plugin>
-    <id>com.github.xxx.LpcLanguage</id>
+    <id>com.github.xxx.lpc</id>
     <name>LPC</name>
-    <vendor email="mpd@yjesters-court.net" url="https://github.com/xxx">mpd</vendor>
+    <version>0.8</version>
+    <vendor email="mpd@yjesters-court.net" url="https://github.com/xxx">Michael Dungan</vendor>
 
     <description><![CDATA[
     Syntax and refactoring Support for the LPC Language
