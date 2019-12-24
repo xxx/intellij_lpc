@@ -20,7 +20,11 @@ class LPCFoldingBuilder : FoldingBuilderEx() {
 
         val descriptors: MutableList<FoldingDescriptor> = ArrayList()
         blocks.filterNotNull().forEach {
-            descriptors.add(FoldingDescriptor(it, TextRange(it.textRange.startOffset + 1, it.textRange.endOffset - 1)))
+            val startOffset = it.textRange.startOffset + 1
+            val endOffset = it.textRange.endOffset - 1
+            if (endOffset - startOffset > 0) {
+                descriptors.add(FoldingDescriptor(it, TextRange(startOffset, endOffset)))
+            }
         }
         return descriptors.toTypedArray()
     }
