@@ -1,6 +1,5 @@
 package com.github.xxx.lpc
 
-import com.github.xxx.lpc.LPCUtils.Companion.matchingRule
 import com.github.xxx.lpc.psi.FunctionPrototypeSubtree
 import com.github.xxx.lpc.psi.IdentifierPSINode
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo
