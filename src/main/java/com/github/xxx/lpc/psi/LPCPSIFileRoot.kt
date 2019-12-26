@@ -10,6 +10,7 @@ import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import com.github.xxx.lpc.LPCIcons
 import com.github.xxx.lpc.LPCLanguage
+import com.intellij.psi.util.PsiTreeUtil
 import javax.swing.Icon
 
 class LPCPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, LPCLanguage.INSTANCE), ScopeNode {
@@ -33,10 +34,18 @@ class LPCPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
     }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        return if (element.parent is CallSubtree) {
-            SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
-                    element, "//function_definition//identifier")
-        } else SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
-                element, "//name_list//identifier")
+       if (PsiTreeUtil.getParentOfType<CallSubtree>(element, CallSubtree::class.java) != null ||
+           PsiTreeUtil.getParentOfType<FunctionPrototypeSubtree>(element, FunctionPrototypeSubtree::class.java) != null) {
+           val node = SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
+               element, "//function_definition//identifier")
+
+           val ret = PsiTreeUtil.getParentOfType<FunctionImplementationSubtree>(node, FunctionImplementationSubtree::class.java)
+           if (ret != null) {
+               return ret
+           }
+
+           return PsiTreeUtil.getParentOfType<FunctionPrototypeSubtree>(node, FunctionPrototypeSubtree::class.java)
+        } else return SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
+            element, "//name_list//identifier")
     }
 }

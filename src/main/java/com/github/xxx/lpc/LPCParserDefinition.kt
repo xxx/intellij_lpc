@@ -6,7 +6,6 @@ import com.github.xxx.lpc.psi.CallSubtree
 import com.github.xxx.lpc.psi.FunctionDeclSubtree
 import com.github.xxx.lpc.psi.FunctionImplementationSubtree
 import com.github.xxx.lpc.psi.FunctionPrototypeSubtree
-import com.github.xxx.lpc.psi.IdentifierPSINode
 import com.github.xxx.lpc.psi.LPCPSIFileRoot
 import com.github.xxx.lpc.psi.VarDefSubtree
 import com.intellij.lang.ASTNode
@@ -39,13 +38,14 @@ class LPCParserDefinition : ParserDefinition {
 
         init {
             PSIElementTypeFactory.defineLanguageIElementTypes(LPCLanguage.INSTANCE,
-//                LPCParser.VOCABULARY,
                     LPCLexer.tokenNames,
                     LPCParser.ruleNames
             )
 
             val tokenIElementTypes = PSIElementTypeFactory.getTokenIElementTypes(LPCLanguage.INSTANCE)
-            ID = tokenIElementTypes[LPCLexer.Identifier];
+            ID = tokenIElementTypes[LPCLexer.Identifier]
+
+            // val ruleIElementTypes = PSIElementTypeFactory.getRuleIElementTypes(LPCLanguage.INSTANCE)
         }
 
         val COMMENTS = createTokenSet(
@@ -103,13 +103,13 @@ class LPCParserDefinition : ParserDefinition {
 
         return when (elType.ruleIndex) {
             LPCParser.RULE_function_prototype -> FunctionPrototypeSubtree(node)
-            LPCParser.RULE_function_implementation -> FunctionImplementationSubtree(node, elType)
+            LPCParser.RULE_function_implementation -> FunctionImplementationSubtree(node, ID)
             LPCParser.RULE_new_name,
             LPCParser.RULE_single_new_local_def,
             LPCParser.RULE_single_new_local_def_with_init,
-            LPCParser.RULE_new_local_def  -> VarDefSubtree(node, elType)
+            LPCParser.RULE_new_local_def  -> VarDefSubtree(node, ID)
             LPCParser.RULE_function_decl -> FunctionDeclSubtree(node)
-            LPCParser.RULE_new_arg -> ArgDefSubtree(node, elType)
+            LPCParser.RULE_new_arg -> ArgDefSubtree(node, ID)
             LPCParser.RULE_block -> BlockSubtree(node)
             LPCParser.RULE_function_call -> CallSubtree(node)
             else -> ANTLRPsiNode(node)

@@ -3,6 +3,7 @@ package com.github.xxx.lpc.psi
 import com.github.xxx.lpc.LPCLanguage
 import com.github.xxx.lpc.LPCParserDefinition
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.tree.IElementType
@@ -88,14 +89,18 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
      * as we have parent (context) information.
      */
     override fun getReference(): PsiReference? {
-        return null
-
         val elType = parent.node.elementType
+
         // do not return a reference for the ID nodes in a definition
         if (elType is RuleIElementType) {
             when (elType.ruleIndex) {
                 LPCParser.RULE_statement -> return VariableRef(this)
                 LPCParser.RULE_function_name -> return FunctionRef(this)
+                LPCParser.RULE_identifier -> {
+                    if ((parent.parent.parent.node.elementType as RuleIElementType).ruleIndex == LPCParser.RULE_function_prototype) {
+                        return FunctionPrototypeRef(this)
+                    }
+                }
             }
         }
         return null
