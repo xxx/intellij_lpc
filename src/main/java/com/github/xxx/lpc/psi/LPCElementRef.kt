@@ -23,8 +23,9 @@ abstract class LPCElementRef(element: IdentifierPSINode) :
      * getElement() refers to the identifier node that references the definition.
      */
     @Throws(IncorrectOperationException::class)
-    override fun handleElementRename(newElementName: String): PsiElement { //		System.out.println(getClass().getSimpleName()+".handleElementRename("+myElement.getName()+"->"+newElementName+
-//			                   ") on "+myElement+" at "+Integer.toHexString(myElement.hashCode()));
+    override fun handleElementRename(newElementName: String): PsiElement {
+        		// println(KClass::class.simpleName+".handleElementRename("+myElement?.name +"->"+newElementName+
+			    //                ") on "+myElement+" at "+Integer.toHexString(myElement.hashCode()));
         return myElement!!.setName(newElementName)
     }
 

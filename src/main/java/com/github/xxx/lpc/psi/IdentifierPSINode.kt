@@ -3,15 +3,16 @@ package com.github.xxx.lpc.psi
 import com.github.xxx.lpc.LPCLanguage
 import com.github.xxx.lpc.LPCParserDefinition
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiNameIdentifierOwner
+import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.PsiReference
+import com.intellij.psi.impl.PsiFileFactoryImpl
 import com.intellij.psi.tree.IElementType
 import com.intellij.util.IncorrectOperationException
 import lpc.LPCParser
 import org.antlr.intellij.adaptor.lexer.RuleIElementType
 import org.antlr.intellij.adaptor.psi.ANTLRPsiLeafNode
-import org.antlr.intellij.adaptor.psi.Trees
+import org.antlr.intellij.adaptor.xpath.XPath
 import org.jetbrains.annotations.NonNls
 
 /** From doc: "Every element which can be renamed or referenced
@@ -63,15 +64,16 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
 		System.out.println("IdentifierPSINode.setName("+name+") on "+
 			                   kind+this+" at "+Integer.toHexString(this.hashCode()));
 		*/
-        val newID = Trees.createLeafFromText(
-            project,
-            LPCLanguage.INSTANCE,
-            context,
-            name,
-            LPCParserDefinition.ID
-        )
-        return if (newID != null) {
-            this.replace(newID) // use replace on leaves but replaceChild on ID nodes that are part of defs/decls.
+
+        val factory = PsiFileFactory.getInstance(project) as PsiFileFactoryImpl
+        val el = factory.createElementFromText(
+            name, LPCLanguage.INSTANCE, LPCParserDefinition.ID, context) ?: return this
+
+        val nodes = XPath.findAll(LPCLanguage.INSTANCE, el, "//Identifier")
+
+        return if (nodes.isNotEmpty()) {
+            // use replace on leaves but replaceChild on ID nodes that are part of defs/decls.
+            this.replace(nodes.first())
         } else this
     }
 
