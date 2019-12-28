@@ -664,7 +664,7 @@ basic_type
 
 atomic_type
     :   BasicType
-    |   Class DefinedName
+//    |   Class DefinedName
     ;
 
 expr4
@@ -749,7 +749,7 @@ string_con1
 // combine into expr4
 function_call
     :   efun_override LeftParen expr_list RightParen
-    |   New LeftParen expr_list RightParen
+//    |   New LeftParen expr_list RightParen
 //    |   New LeftParen Class DefinedName opt_class_init RightParen
     |   DefinedName LeftParen expr_list RightParen
     |   function_name_call  //function_name LeftParen expr_list RightParen
