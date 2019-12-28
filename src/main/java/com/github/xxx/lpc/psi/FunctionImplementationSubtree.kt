@@ -1,11 +1,13 @@
 package com.github.xxx.lpc.psi
 
+import com.github.xxx.lpc.LPCIcons
 import com.github.xxx.lpc.LPCLanguage
+import com.intellij.ide.projectView.PresentationData
 import com.intellij.lang.ASTNode
+import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.tree.IElementType
-import com.intellij.psi.util.PsiTreeUtil
 import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.psi.ScopeNode
@@ -23,17 +25,26 @@ class FunctionImplementationSubtree(node: ASTNode, idElementType: IElementType) 
         		// 	                   " at "+Integer.toHexString(element.hashCode())+")")
         return SymtabUtils.resolve(
             this, LPCLanguage.INSTANCE,
-            element, "//function_implementation/function_decl/identifier"
+            element, "//function_implementation/Identifier"
         )
     }
 
     override fun getNameIdentifier(): PsiElement? {
         val ids : Collection<PsiElement?> = XPath.findAll(LPCLanguage.INSTANCE, this,
-            "//function_decl/identifier")
+            "//function_implementation/Identifier")
         if (ids.isNotEmpty()) {
-            return PsiTreeUtil.findChildOfType(this, IdentifierPSINode::class.java)
+            return ids.first()
         }
 
         return null
+    }
+
+    override fun getPresentation(): ItemPresentation? {
+        return PresentationData(
+            "${children[0].text} ${children[1].text}${children[2].text}(${children[4].text})",
+            "",
+            LPCIcons.FILE,
+            null
+        )
     }
 }

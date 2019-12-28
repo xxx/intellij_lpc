@@ -25,7 +25,7 @@ class LPCLineMarkerProvider : RelatedItemLineMarkerProvider() {
 
             val file = element.containingFile
             val funcNameNodes : Collection<PsiElement?> =
-                XPath.findAll(LPCLanguage.INSTANCE, file, "//function_implementation/function_decl/identifier")
+                XPath.findAll(LPCLanguage.INSTANCE, file, "//function_implementation/Identifier")
 
             val funcNames: Map<String, PsiElement?> = Trees.toMap(funcNameNodes)
 

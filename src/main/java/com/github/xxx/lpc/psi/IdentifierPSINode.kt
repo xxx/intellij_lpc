@@ -96,11 +96,7 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
             when (elType.ruleIndex) {
                 LPCParser.RULE_statement -> return VariableRef(this)
                 LPCParser.RULE_function_name -> return FunctionRef(this)
-                LPCParser.RULE_identifier -> {
-                    if ((parent.parent.parent.node.elementType as RuleIElementType).ruleIndex == LPCParser.RULE_function_prototype) {
-                        return FunctionPrototypeRef(this)
-                    }
-                }
+                LPCParser.RULE_function_prototype -> return FunctionPrototypeRef(this)
             }
         }
         return null

@@ -34,18 +34,14 @@ class LPCPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
     }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {
-       if (PsiTreeUtil.getParentOfType<CallSubtree>(element, CallSubtree::class.java) != null ||
-           PsiTreeUtil.getParentOfType<FunctionPrototypeSubtree>(element, FunctionPrototypeSubtree::class.java) != null) {
-           val node = SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
-               element, "//function_definition//identifier")
+        return if (PsiTreeUtil.getParentOfType<CallSubtree>(element, CallSubtree::class.java) != null ||
+            PsiTreeUtil.getParentOfType<FunctionPrototypeSubtree>(element, FunctionPrototypeSubtree::class.java) != null) {
 
-           val ret = PsiTreeUtil.getParentOfType<FunctionImplementationSubtree>(node, FunctionImplementationSubtree::class.java)
-           if (ret != null) {
-               return ret
-           }
-
-           return PsiTreeUtil.getParentOfType<FunctionPrototypeSubtree>(node, FunctionPrototypeSubtree::class.java)
-        } else return SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
-            element, "//name_list//identifier")
+            SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
+                element, "//function_implementation/Identifier") ?:
+            SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
+                element, "//function_prototype/Identifier")
+        } else SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
+            element, "//name_list//Identifier")
     }
 }

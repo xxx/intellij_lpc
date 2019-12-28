@@ -40,7 +40,7 @@ class LPCStructureViewElement(private val element: NavigatablePsiElement) : Stru
     override fun getChildren(): Array<TreeElement> {
         if (element is PsiFile) {
             val functions =
-                XPath.findAll(LPCLanguage.INSTANCE, element, "//function_implementation/function_decl")
+                XPath.findAll(LPCLanguage.INSTANCE, element, "//function_implementation")
             val treeElements: MutableList<TreeElement> = ArrayList(functions.size)
             functions.forEach {
                 treeElements.add(LPCStructureViewElement(it as NavigatablePsiElement))
