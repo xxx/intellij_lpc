@@ -245,12 +245,20 @@ Range
 
 // These make brace matching more difficult, as intellij doesn't know to
 // skip over the first char of a closing multi-char match when typing it
-MappingOpen
+mapping_open
     :   LeftParen (Whitespace|Newline)* LeftBracket
     ;
 
-ArrayOpen
+array_open
     :   LeftParen (Whitespace|Newline)* LeftBrace
+    ;
+
+mapping_empty
+    : '([])'
+    ;
+
+array_empty
+    : '({})'
     ;
 
 //FunctionOpen
@@ -738,15 +746,18 @@ expr4
 //    |   L_NEW_FUNCTION_OPEN Comma expr_list2 ':' RightParen
 //    |   FunctionOpen comma_expr ':' RightParen
 
-    |   MappingOpen expr_list3 RightBracket RightParen
-    |   ArrayOpen expr_list RightBrace RightParen
+    |   mapping_empty
+    |   array_empty
+    |   mapping_open expr_list3 RightBracket RightParen
+    |   array_open expr_list RightBrace RightParen
     |   function_pointer
     ;
 
 function_pointer
     : Identifier
     // Handle ambiguity for ([]) meaning either an empty mapping or using &operator([])
-    | And Operator MappingOpen RightBracket RightParen LeftParen partial_expr_list RightParen
+    | And Operator mapping_empty LeftParen partial_expr_list RightParen
+//    | And Operator mapping_open RightBracket RightParen LeftParen partial_expr_list RightParen
     | And Operator LeftParen pointer_operator RightParen LeftParen partial_expr_list RightParen
     | And Identifier LeftParen partial_expr_list RightParen
     | And Arrow Identifier LeftParen partial_expr_list RightParen
@@ -827,7 +838,7 @@ function_call
 //    |   DefinedName LeftParen expr_list RightParen
     |   function_name_call  //function_name LeftParen expr_list RightParen
     |   function_arrow_call //expr4 Arrow identifier LeftParen expr_list RightParen
-    |   LeftParen '*' comma_expr RightParen LeftParen expr_list RightParen
+//    |   LeftParen '*' comma_expr RightParen LeftParen expr_list RightParen
     ;
 
 function_name_call
@@ -911,7 +922,7 @@ statement
     |   /* empty */ SemiColon
     |   Break SemiColon
     |   Continue SemiColon
-    |   preprocessor_directive statement
+    |   preprocessor_directive
     ;
 
 while_statement
