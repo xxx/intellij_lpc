@@ -107,7 +107,7 @@ class LPCParserDefinition : ParserDefinition {
             LPCParser.RULE_single_new_local_def,
             LPCParser.RULE_single_new_local_def_with_init,
             LPCParser.RULE_new_local_def  -> VarDefSubtree(node, ID)
-            LPCParser.RULE_new_arg -> ArgDefSubtree(node, ID)
+            LPCParser.RULE_argument_definition -> ArgDefSubtree(node, ID)
             LPCParser.RULE_block -> BlockSubtree(node)
             LPCParser.RULE_function_call -> CallSubtree(node)
             else -> ANTLRPsiNode(node)

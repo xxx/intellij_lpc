@@ -13,6 +13,15 @@ TypeModifier
     |   'varargs'
     ;
 
+PragmaType
+    :   'strict_types'
+    |   'no_clone'
+    |   'no_inheritance'
+    |   'no_shadow'
+    |   'resident'
+    |   'save_binary'
+    ;
+
 Assign
     :   '='
     |   '+='
@@ -291,6 +300,10 @@ ComplexInclude
 //        -> channel(HIDDEN)
     ;
 
+ComplexPragma
+    :   '#' Whitespace* 'pragma' Whitespace+ PragmaType Whitespace* [\r\n]+
+    ;
+
 ComplexPreprocessor
     :   '#' ~[\r\n]*
 //        -> channel(HIDDEN)
@@ -530,13 +543,14 @@ possible_semi_colon
 
 definition
     :   function_definition
-    |   data_type name_list SemiColon
+    |   global_variable_definition
     |   inheritance
 //    |   type_decl
 //    |   modifier_change
-    |   ComplexPreprocessor
     |   ComplexDefine
     |   ComplexInclude
+    |   ComplexPragma
+    |   ComplexPreprocessor
     ;
 
 function_definition
@@ -582,6 +596,10 @@ type_modifier_list
 //member_name
 //    :   optional_star identifier
 //    ;
+
+global_variable_definition
+    :   data_type name_list SemiColon
+    ;
 
 name_list
     :   new_name
@@ -655,17 +673,18 @@ lvalue_list
     ;
 
 cast
-    :   LeftParen basic_type optional_star RightParen
+    :   LeftParen BasicType optional_star RightParen
     ;
 
-basic_type
-    :   atomic_type
-    ;
+//basic_type
+//    :   BasicType
+//    :   atomic_type
+//    ;
 
-atomic_type
-    :   BasicType
+//atomic_type
+//    :   BasicType
 //    |   Class DefinedName
-    ;
+//    ;
 
 expr4
     :   function_call
@@ -793,11 +812,11 @@ block
 statements
     :   /* empty */
     |   statement statements
-    |   local_declare_statement statements
+    |   local_variable_definition statements
     ;
 
-local_declare_statement
-    :   basic_type local_name_list SemiColon
+local_variable_definition
+    :   BasicType local_name_list SemiColon
     ;
 
 local_name_list
@@ -821,7 +840,7 @@ statement
     |   while_statement
     |   do_statement
     |   switch_statement
-    |   returnStatement
+    |   return_statement
 
     // decl_block
     |   block
@@ -847,7 +866,7 @@ switch_statement
 
 local_declarations
     :   /* empty */
-    |   local_declarations basic_type local_name_list SemiColon
+    |   local_declarations local_variable_definition
     ;
 
 case_statement
@@ -930,7 +949,7 @@ single_new_local_def_with_init
     ;
 
 single_new_local_def
-    :   basic_type optional_star Identifier
+    :   BasicType optional_star Identifier
     ;
 
 for_expr
@@ -938,7 +957,7 @@ for_expr
     |   comma_expr
     ;
 
-returnStatement
+return_statement
     :   Return SemiColon
     |   Return comma_expr SemiColon
     ;
@@ -959,13 +978,13 @@ argument
     ;
 
 argument_list
-    :   new_arg
-    |   argument_list Comma new_arg
+    :   argument_definition
+    |   argument_list Comma argument_definition
     ;
 
-new_arg
-    :   basic_type optional_star
-    |   basic_type optional_star Identifier
+argument_definition
+    :   BasicType optional_star
+    |   BasicType optional_star Identifier
     |   Identifier
     ;
 
@@ -982,7 +1001,7 @@ data_type
     ;
 
 opt_basic_type
-    :   basic_type
+    :   BasicType
     |   /* empty */
     ;
 
