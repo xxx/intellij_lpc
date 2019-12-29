@@ -138,9 +138,9 @@ Continue
     :   'continue'
     ;
 
-DefinedName
-    :   'foo'
-    ;
+//DefinedName
+//    :   'foo'
+//    ;
 
 Efun
     :   'efun'
@@ -560,10 +560,10 @@ function_prototype
 //    :   type_modifier_list ':'
 //    ;
 
-//type_modifier_list
-//    :   /* empty */
-//    |   TypeModifier type_modifier_list
-//    ;
+type_modifier_list
+    :   /* empty */
+    |   TypeModifier type_modifier_list
+    ;
 
 //type_decl
 //    :   type_modifier_list Class identifier LeftBrace member_list RightBrace
@@ -670,7 +670,7 @@ atomic_type
 expr4
     :   function_call
     |   expr4 function_arrow_call
-    |   DefinedName
+//    |   DefinedName
     |   Identifier
     |   Parameter
 //    |   '$' LeftParen comma_expr RightParen
@@ -751,7 +751,7 @@ function_call
     :   efun_override LeftParen expr_list RightParen
 //    |   New LeftParen expr_list RightParen
 //    |   New LeftParen Class DefinedName opt_class_init RightParen
-    |   DefinedName LeftParen expr_list RightParen
+//    |   DefinedName LeftParen expr_list RightParen
     |   function_name_call  //function_name LeftParen expr_list RightParen
     |   function_arrow_call //expr4 Arrow identifier LeftParen expr_list RightParen
     |   LeftParen '*' comma_expr RightParen LeftParen expr_list RightParen
@@ -768,7 +768,7 @@ function_arrow_call
 function_name
     :   Identifier
     |   ColonColon Identifier
-    |   BasicType ColonColon Identifier
+//    |   BasicType ColonColon Identifier
     |   Identifier ColonColon Identifier
     ;
 
@@ -977,8 +977,8 @@ inheritance
     ;
 
 data_type
-//    :   type_modifier_list opt_basic_type
-    :   opt_basic_type
+    :   type_modifier_list opt_basic_type
+    |   opt_basic_type
     ;
 
 opt_basic_type

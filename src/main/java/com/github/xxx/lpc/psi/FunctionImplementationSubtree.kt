@@ -43,7 +43,7 @@ class FunctionImplementationSubtree(node: ASTNode, idElementType: IElementType) 
         return PresentationData(
             "${children[0].text} ${children[1].text}${children[2].text}(${children[4].text})",
             "",
-            LPCIcons.FILE,
+            LPCIcons.C_FILE,
             null
         )
     }

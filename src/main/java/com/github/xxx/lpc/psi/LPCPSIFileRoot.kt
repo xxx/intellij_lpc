@@ -23,7 +23,12 @@ class LPCPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
     }
 
     override fun getIcon(flags: Int): Icon? {
-        return LPCIcons.FILE
+        return when(virtualFile.extension) {
+            "c" -> LPCIcons.C_FILE
+            "h" -> LPCIcons.H_FILE
+            "o" -> LPCIcons.O_FILE
+            else -> null
+        }
     }
 
     /** Return null since a file scope has no enclosing scope. It is

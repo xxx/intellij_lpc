@@ -22,6 +22,6 @@ class LPCFileType : LanguageFileType(LPCLanguage.INSTANCE) {
     }
 
     override fun getIcon(): Icon? {
-        return LPCIcons.FILE
+        return LPCIcons.C_FILE
     }
 }

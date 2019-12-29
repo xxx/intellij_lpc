@@ -15,7 +15,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="LPC file" implementationClass="com.github.xxx.lpc.LPCFileType" fieldName="INSTANCE"
-                  language="LPC" extensions="c;h"/>
+                  language="LPC" extensions="c;h;o"/>
         <lang.parserDefinition language="LPC" implementationClass="com.github.xxx.lpc.LPCParserDefinition"/>
         <lang.syntaxHighlighterFactory language="LPC" implementationClass="com.github.xxx.lpc.LPCSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.github.xxx.lpc.LPCColorSettingsPage"/>

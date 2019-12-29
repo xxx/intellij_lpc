@@ -32,7 +32,7 @@ class LPCLineMarkerProvider : RelatedItemLineMarkerProvider() {
             if (funcNames.containsKey(element.text)) {
                 val builder =
                     NavigationGutterIconBuilder
-                        .create(LPCIcons.FILE)
+                        .create(LPCIcons.GUTTER_ARROW_DOWN)
                         .setTargets(funcNames[element.text])
                         .setTooltipText("Navigate to implementation")
                 result.add(builder.createLineMarkerInfo(element))

@@ -9,7 +9,7 @@ import javax.swing.Icon
 
 class LPCColorSettingsPage : ColorSettingsPage {
     override fun getIcon(): Icon? {
-        return LPCIcons.FILE
+        return LPCIcons.C_FILE
     }
 
     override fun getHighlighter(): SyntaxHighlighter {
