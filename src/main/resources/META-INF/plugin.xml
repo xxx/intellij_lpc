@@ -28,6 +28,7 @@
         <lang.ast.factory language="LPC" implementationClass="com.github.xxx.lpc.LPCASTFactory" />
         <completion.contributor language="LPC" implementationClass="com.github.xxx.lpc.LPCCompletionContributor" />
         <lang.refactoringSupport language="LPC" implementationClass="com.github.xxx.lpc.LPCRefactoringSupportProvider"/>
+        <lang.findUsagesProvider language="LPC" implementationClass="com.github.xxx.lpc.LPCFindUsagesProvider" />
     </extensions>
 
 
