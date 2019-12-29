@@ -22,8 +22,12 @@ PragmaType
     |   'save_binary'
     ;
 
-Assign
+StrictAssign
     :   '='
+    ;
+
+Assign
+    :   StrictAssign
     |   '+='
     |   '-='
     |   '&='
@@ -80,24 +84,6 @@ NotEqual
 
 Plus
     : '+'
-    ;
-
-pointer_operator
-    :   Equal
-    |   NotEqual
-    |   '[]'
-    |   Plus
-    |   '-'
-    |   '*'
-    |   '/'
-    |   '%'
-    |   Caret
-    |   Or
-    |   And
-    |   OrOr
-    |   AndAnd
-    |   Great
-    |   Less
     ;
 
 Compare
@@ -259,21 +245,13 @@ Range
 
 // These make brace matching more difficult, as intellij doesn't know to
 // skip over the first char of a closing multi-char match when typing it
-//MappingOpen
-//    :   LeftParen (Whitespace|Newline)* LeftBracket
-//    ;
-//
-//MappingClose
-//    :   RightBracket (Whitespace|Newline)* RightParen
-//    ;
-//
-//ArrayOpen
-//    :   LeftParen (Whitespace|Newline)* LeftBrace
-//    ;
-//
-//ArrayClose
-//    :   RightBrace (Whitespace|Newline)* RightParen
-//    ;
+MappingOpen
+    :   LeftParen (Whitespace|Newline)* LeftBracket
+    ;
+
+ArrayOpen
+    :   LeftParen (Whitespace|Newline)* LeftBrace
+    ;
 
 //FunctionOpen
 //    :   LeftParen Whitespace* ':' {_input.LA(1) != ':'}?    // java
@@ -332,6 +310,7 @@ ComplexInclude
 
 ComplexPragma
     :   '#' Whitespace* 'pragma' Whitespace+ PragmaType Whitespace* [\r\n]+
+//        -> channel(HIDDEN)
     ;
 
 ComplexPreprocessor
@@ -572,15 +551,12 @@ possible_semi_colon
     ;
 
 definition
-    :   function_definition
-    |   global_variable_definition
+    :   global_variable_definition
+    |   function_definition
     |   inheritance
 //    |   type_decl
 //    |   modifier_change
-    |   ComplexDefine
-    |   ComplexInclude
-    |   ComplexPragma
-    |   ComplexPreprocessor
+    |   preprocessor_directive
     ;
 
 function_definition
@@ -634,11 +610,11 @@ name_list
 
 new_name
     :   optional_star Identifier
-    |   optional_star Identifier Assign expr0
+    |   optional_star Identifier StrictAssign expr0
     ;
 
 expr0
-    :   expr4 Assign expr0
+    :   expr4 assign expr0
     |   expr0 Compose expr0
     |   expr0 Question expr0 Colon expr0
     |   expr0 OrOr expr0
@@ -673,6 +649,28 @@ expr0
     |   Real
     ;
 
+assign
+    : Assign
+    | StrictAssign
+    ;
+
+pointer_operator
+    :   Equal
+    |   NotEqual
+    |   '[]'
+    |   Plus
+    |   '-'
+    |   '*'
+    |   '/'
+    |   '%'
+    |   Caret
+    |   Or
+    |   And
+    |   OrOr
+    |   AndAnd
+    |   Great
+    |   Less
+    ;
 //time_expression
 //    :   TimeExpression expr_or_block
 //    ;
@@ -719,7 +717,6 @@ expr4
     |   expr4 function_arrow_call
 //    |   DefinedName
     |   Identifier
-    |   function_pointer
 
 //    |   Parameter
 //    |   '$' LeftParen comma_expr RightParen
@@ -740,12 +737,16 @@ expr4
 //    |   L_NEW_FUNCTION_OPEN ':' RightParen
 //    |   L_NEW_FUNCTION_OPEN Comma expr_list2 ':' RightParen
 //    |   FunctionOpen comma_expr ':' RightParen
-    |   LeftParen LeftBracket expr_list3 RightBracket RightParen
-    |   LeftParen LeftBrace expr_list RightBrace RightParen
+
+    |   MappingOpen expr_list3 ']' ')'
+    |   ArrayOpen expr_list '}' ')'
+    |   function_pointer
     ;
 
 function_pointer
     : Identifier
+    // Handle ambiguity for ([]) meaning either an empty mapping or using &operator([])
+    | And Operator MappingOpen ']' ')' LeftParen partial_expr_list RightParen
     | And Operator LeftParen pointer_operator RightParen LeftParen partial_expr_list RightParen
     | And Identifier LeftParen partial_expr_list RightParen
     | And Arrow Identifier LeftParen partial_expr_list RightParen
@@ -868,6 +869,13 @@ statements
     |   local_variable_definition statements
     ;
 
+preprocessor_directive
+    : ComplexPragma
+    | ComplexInclude
+    | ComplexDefine
+    | ComplexPreprocessor
+    ;
+
 local_variable_definition
     :   BasicType local_name_list SemiColon
     ;
@@ -879,7 +887,7 @@ local_name_list
 
 new_local_def
     :   optional_star Identifier
-    |   optional_star Identifier Assign expr0
+    |   optional_star Identifier StrictAssign expr0
     ;
 
 //new_local_name
@@ -903,6 +911,7 @@ statement
     |   /* empty */ SemiColon
     |   Break SemiColon
     |   Continue SemiColon
+    |   preprocessor_directive statement
     ;
 
 while_statement
@@ -998,7 +1007,7 @@ first_for_expr
     ;
 
 single_new_local_def_with_init
-    :   single_new_local_def Assign expr0
+    :   single_new_local_def StrictAssign expr0
     ;
 
 single_new_local_def
@@ -1036,9 +1045,14 @@ argument_list
     ;
 
 argument_definition
-    :   BasicType optional_star
-    |   BasicType optional_star Identifier
-    |   Identifier
+    :   BasicType optional_star optional_arg_assignment
+    |   BasicType optional_star Identifier optional_arg_assignment
+    |   Identifier optional_arg_assignment
+    ;
+
+optional_arg_assignment
+    : /* empty */
+    |   StrictAssign expr0
     ;
 
 inheritance

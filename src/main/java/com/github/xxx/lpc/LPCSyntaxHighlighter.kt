@@ -79,6 +79,7 @@ class LPCSyntaxHighlighter : SyntaxHighlighterBase() {
             LPCLexer.Ellipsis -> KEYWORD
 
             LPCLexer.Assign,
+            LPCLexer.StrictAssign,
             LPCLexer.PlusPlus,
             LPCLexer.MinusMinus,
             LPCLexer.And,
