@@ -236,9 +236,9 @@ Range
 //    :   RightBrace (Whitespace|Newline)* RightParen
 //    ;
 
-FunctionOpen
-    :   LeftParen Whitespace* ':' {_input.LA(1) != ':'}?    // java
-    ;
+//FunctionOpen
+//    :   LeftParen Whitespace* ':' {_input.LA(1) != ':'}?    // java
+//    ;
 
 LeftParen
     :   '('
@@ -345,13 +345,13 @@ IntegerConstant
     :   DecimalConstant
     |   OctalConstant
     |   HexadecimalConstant
-    |   BinaryConstant
+//    |   BinaryConstant
     ;
 
-fragment
-BinaryConstant
-    :   '0' [bB] [0-1]+
-    ;
+//fragment
+//BinaryConstant
+//    :   '0' [bB] [0-1]+
+//    ;
 
 fragment
 DecimalConstant
@@ -690,7 +690,7 @@ expr4
     |   BasicType LeftParen argument RightParen block
 //    |   L_NEW_FUNCTION_OPEN ':' RightParen
 //    |   L_NEW_FUNCTION_OPEN Comma expr_list2 ':' RightParen
-    |   FunctionOpen comma_expr ':' RightParen
+//    |   FunctionOpen comma_expr ':' RightParen
     |   LeftParen LeftBracket expr_list3 RightBracket RightParen
     |   LeftParen LeftBrace expr_list RightBrace RightParen
     ;
