@@ -249,16 +249,25 @@ mapping_open
     :   LeftParen (Whitespace|Newline)* LeftBracket
     ;
 
+mapping_close
+    :   RightParen (Whitespace|Newline)* RightBracket
+    ;
+
 array_open
     :   LeftParen (Whitespace|Newline)* LeftBrace
     ;
 
+array_close
+    :   RightParen (Whitespace|Newline)* RightBrace
+    ;
+
 mapping_empty
-    : '([])'
+    : mapping_open (Whitespace|Newline)* mapping_close
+    | LeftParen '[]' RightParen
     ;
 
 array_empty
-    : '({})'
+    : array_open (Whitespace|Newline)* array_close
     ;
 
 //FunctionOpen
@@ -757,7 +766,6 @@ function_pointer
     : Identifier
     // Handle ambiguity for ([]) meaning either an empty mapping or using &operator([])
     | And Operator mapping_empty LeftParen partial_expr_list RightParen
-//    | And Operator mapping_open RightBracket RightParen LeftParen partial_expr_list RightParen
     | And Operator LeftParen pointer_operator RightParen LeftParen partial_expr_list RightParen
     | And Identifier LeftParen partial_expr_list RightParen
     | And Arrow Identifier LeftParen partial_expr_list RightParen

@@ -3,6 +3,7 @@ package com.github.xxx.lpc
 import com.github.xxx.lpc.psi.ArgDefSubtree
 import com.github.xxx.lpc.psi.BlockSubtree
 import com.github.xxx.lpc.psi.CallSubtree
+import com.github.xxx.lpc.psi.ExpressionSubtree
 import com.github.xxx.lpc.psi.FunctionImplementationSubtree
 import com.github.xxx.lpc.psi.FunctionPrototypeSubtree
 import com.github.xxx.lpc.psi.LPCPSIFileRoot
@@ -110,6 +111,7 @@ class LPCParserDefinition : ParserDefinition {
             LPCParser.RULE_argument_definition -> ArgDefSubtree(node, ID)
             LPCParser.RULE_block -> BlockSubtree(node)
             LPCParser.RULE_function_call -> CallSubtree(node)
+            LPCParser.RULE_expr4 -> ExpressionSubtree(node)
             else -> ANTLRPsiNode(node)
         }
     }
