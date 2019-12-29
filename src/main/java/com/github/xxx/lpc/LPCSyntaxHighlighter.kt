@@ -36,6 +36,9 @@ class LPCSyntaxHighlighter : SyntaxHighlighterBase() {
         val BAD_CHARS = TextAttributesKey.createTextAttributesKey("LPC_BAD_CHARS",
                 HighlighterColors.BAD_CHARACTER)
 
+        val PREPROCESSOR = TextAttributesKey.createTextAttributesKey("LPC_PREPROCESSOR_DIRECTIVE",
+                DefaultLanguageHighlighterColors.METADATA)
+
         init {
             PSIElementTypeFactory.defineLanguageIElementTypes(LPCLanguage.INSTANCE,
                     LPCParser.tokenNames,
@@ -55,7 +58,10 @@ class LPCSyntaxHighlighter : SyntaxHighlighterBase() {
         attrKey = when (ttype) {
             LPCLexer.Identifier -> ID
 
-            LPCLexer.ComplexDefine -> CONSTANT
+            LPCLexer.ComplexPragma,
+            LPCLexer.ComplexInclude,
+            LPCLexer.ComplexPreprocessor,
+            LPCLexer.ComplexDefine -> PREPROCESSOR
 
             LPCLexer.BasicType,
             LPCLexer.TypeModifier,
