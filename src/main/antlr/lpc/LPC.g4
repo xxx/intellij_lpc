@@ -78,6 +78,28 @@ NotEqual
     :   '!='
     ;
 
+Plus
+    : '+'
+    ;
+
+pointer_operator
+    :   Equal
+    |   NotEqual
+    |   '[]'
+    |   Plus
+    |   '-'
+    |   '*'
+    |   '/'
+    |   '%'
+    |   Caret
+    |   Or
+    |   And
+    |   OrOr
+    |   AndAnd
+    |   Great
+    |   Less
+    ;
+
 Compare
     :   Less
     |   LessEqual
@@ -107,6 +129,10 @@ GreatEqual
 /* Reserved */
 Arrow
     :   '->'
+    ;
+
+Compose
+    :   '@'
     ;
 
 BasicType
@@ -207,6 +233,10 @@ Default
     :   'default'
     ;
 
+Operator
+    :   'operator'
+    ;
+
 //New
 //    :   'new'
 //    ;
@@ -285,9 +315,9 @@ Number
     :   IntegerConstant
     ;
 
-Parameter
-    :   '$' DigitSequence
-    ;
+//Parameter
+//    :   '$' DigitSequence
+//    ;
 
 /* Pre processing */
 ComplexDefine
@@ -566,10 +596,6 @@ function_prototype
     :   data_type optional_star Identifier LeftParen argument RightParen SemiColon
     ;
 
-//function_decl
-//    :   data_type optional_star Identifier LeftParen argument RightParen
-//    ;
-
 //modifier_change
 //    :   type_modifier_list ':'
 //    ;
@@ -613,6 +639,7 @@ new_name
 
 expr0
     :   expr4 Assign expr0
+    |   expr0 Compose expr0
     |   expr0 Question expr0 Colon expr0
     |   expr0 OrOr expr0
     |   expr0 AndAnd expr0
@@ -622,7 +649,7 @@ expr0
     |   expr0 Equal expr0
     |   expr0 NotEqual expr0
     |   expr0 Compare expr0
-    |   expr0 '<' expr0
+//    |   expr0 '<' expr0
     |   expr0 LeftShift expr0
     |   expr0 RightShift expr0
 
@@ -638,6 +665,7 @@ expr0
     |   expr4 PlusPlus   /* normal precedence here */
     |   expr4 MinusMinus
     |   expr4
+
 //    |   sscanf
 //    |   parse_command
 //    |   time_expression
@@ -691,7 +719,9 @@ expr4
     |   expr4 function_arrow_call
 //    |   DefinedName
     |   Identifier
-    |   Parameter
+    |   function_pointer
+
+//    |   Parameter
 //    |   '$' LeftParen comma_expr RightParen
     |   expr4 Arrow Identifier
 //    |   expr4 LeftBracket comma_expr Range '<' comma_expr RightBracket
@@ -706,12 +736,35 @@ expr4
     |   CharacterConstant
     |   LeftParen comma_expr RightParen
     |   catch_statement
-    |   BasicType LeftParen argument RightParen block
+//    |   BasicType LeftParen argument RightParen block
 //    |   L_NEW_FUNCTION_OPEN ':' RightParen
 //    |   L_NEW_FUNCTION_OPEN Comma expr_list2 ':' RightParen
 //    |   FunctionOpen comma_expr ':' RightParen
     |   LeftParen LeftBracket expr_list3 RightBracket RightParen
     |   LeftParen LeftBrace expr_list RightBrace RightParen
+    ;
+
+function_pointer
+    : Identifier
+    | And Operator LeftParen pointer_operator RightParen LeftParen partial_expr_list RightParen
+    | And Identifier LeftParen partial_expr_list RightParen
+    | And Arrow Identifier LeftParen partial_expr_list RightParen
+    ;
+
+partial_expr_list
+    : /* empty */
+    | partial_expr_list2
+    | partial_expr_list2 Comma
+    ;
+
+partial_expr_list2
+    :   partial_expr_list_node
+    |   partial_expr_list2 Comma partial_expr_list_node
+    ;
+
+partial_expr_list_node
+    : /* empty */
+    |   expr_list_node
     ;
 
 catch_statement
