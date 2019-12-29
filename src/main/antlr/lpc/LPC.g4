@@ -738,15 +738,15 @@ expr4
 //    |   L_NEW_FUNCTION_OPEN Comma expr_list2 ':' RightParen
 //    |   FunctionOpen comma_expr ':' RightParen
 
-    |   MappingOpen expr_list3 ']' ')'
-    |   ArrayOpen expr_list '}' ')'
+    |   MappingOpen expr_list3 RightBracket RightParen
+    |   ArrayOpen expr_list RightBrace RightParen
     |   function_pointer
     ;
 
 function_pointer
     : Identifier
     // Handle ambiguity for ([]) meaning either an empty mapping or using &operator([])
-    | And Operator MappingOpen ']' ')' LeftParen partial_expr_list RightParen
+    | And Operator MappingOpen RightBracket RightParen LeftParen partial_expr_list RightParen
     | And Operator LeftParen pointer_operator RightParen LeftParen partial_expr_list RightParen
     | And Identifier LeftParen partial_expr_list RightParen
     | And Arrow Identifier LeftParen partial_expr_list RightParen
