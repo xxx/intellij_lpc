@@ -8,4 +8,8 @@ class LPCRefactoringSupportProvider : RefactoringSupportProvider() {
     override fun isMemberInplaceRenameAvailable(element: PsiElement, context: PsiElement?): Boolean {
         return element is IdentifierPSINode
     }
+
+    override fun isSafeDeleteAvailable(element: PsiElement): Boolean {
+        return element is IdentifierPSINode
+    }
 }

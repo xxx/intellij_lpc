@@ -2,6 +2,7 @@ package com.github.xxx.lpc.psi
 
 import com.github.xxx.lpc.LPCLanguage
 import com.github.xxx.lpc.LPCParserDefinition
+import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiNamedElement
@@ -102,5 +103,19 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
             }
         }
         return null
+    }
+
+    @Throws(IncorrectOperationException::class)
+    override fun delete() {
+        val parentNode: ASTNode = parent.node!!
+        val node: ASTNode = node
+        val prev: ASTNode = node.treePrev
+        val next: ASTNode = node.treeNext
+        parentNode.removeChild(node)
+        if ((prev == null || prev.elementType === LPCParserDefinition.WHITESPACE) &&
+            next != null && next.getElementType() === LPCParserDefinition.WHITESPACE
+        ) {
+            parentNode.removeChild(next)
+        }
     }
 }
