@@ -263,7 +263,7 @@ array_close
 
 mapping_empty
     : mapping_open (Whitespace|Newline)* mapping_close
-    | LeftParen '[]' RightParen
+    | LeftParen OperatorIndex RightParen
     ;
 
 array_empty
@@ -674,7 +674,7 @@ assign
 pointer_operator
     :   Equal
     |   NotEqual
-    |   '[]'
+    |   OperatorIndex
     |   Plus
     |   '-'
     |   '*'
@@ -688,6 +688,10 @@ pointer_operator
     |   Great
     |   Less
     ;
+
+OperatorIndex
+    : '[]' ;
+
 //time_expression
 //    :   TimeExpression expr_or_block
 //    ;
