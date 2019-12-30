@@ -692,7 +692,8 @@ pointer_operator
     ;
 
 OperatorIndex
-    : '[]' ;
+    : '[]'
+    ;
 
 //time_expression
 //    :   TimeExpression expr_or_block
