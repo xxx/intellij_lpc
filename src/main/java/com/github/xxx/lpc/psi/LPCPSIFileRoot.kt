@@ -37,14 +37,28 @@ class LPCPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
     }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        return if (PsiTreeUtil.getParentOfType<CallSubtree>(element, CallSubtree::class.java) != null ||
-            PsiTreeUtil.getParentOfType<FunctionPrototypeSubtree>(element, FunctionPrototypeSubtree::class.java) != null) {
+        return if (PsiTreeUtil.getParentOfType(element, CallSubtree::class.java) != null ||
+            PsiTreeUtil.getParentOfType(element, FunctionPrototypeSubtree::class.java) != null ||
+            PsiTreeUtil.getParentOfType(element, FunctionPointerSubtree::class.java) != null) {
 
-            SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
-                element, "//function_implementation/Identifier") ?:
-            SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
-                element, "//function_prototype/Identifier")
-        } else SymtabUtils.resolve(this, LPCLanguage.INSTANCE,
-            element, "//name_list//Identifier")
+            resolveFunctionId(element)
+        } else if (PsiTreeUtil.getParentOfType(element, ExpressionSubtree::class.java) != null) {
+            resolveFunctionId(element) ?: resolveVarId(element)
+        } else resolveVarId(element)
+    }
+
+    private fun resolveVarId(element: PsiNamedElement) = SymtabUtils.resolve(
+        this, LPCLanguage.INSTANCE,
+        element, "//name_list//Identifier"
+    )
+
+    private fun resolveFunctionId(element: PsiNamedElement): PsiElement? {
+        return SymtabUtils.resolve(
+            this, LPCLanguage.INSTANCE,
+            element, "//function_implementation/Identifier"
+        ) ?: SymtabUtils.resolve(
+            this, LPCLanguage.INSTANCE,
+            element, "//function_prototype/Identifier"
+        )
     }
 }

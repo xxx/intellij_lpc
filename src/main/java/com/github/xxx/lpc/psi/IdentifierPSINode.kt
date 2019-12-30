@@ -1,5 +1,6 @@
 package com.github.xxx.lpc.psi
 
+import com.github.xxx.lpc.LPCConstants
 import com.github.xxx.lpc.LPCLanguage
 import com.github.xxx.lpc.LPCParserDefinition
 import com.intellij.lang.ASTNode
@@ -9,6 +10,7 @@ import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.impl.PsiFileFactoryImpl
 import com.intellij.psi.tree.IElementType
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.IncorrectOperationException
 import lpc.LPCParser
 import org.antlr.intellij.adaptor.lexer.RuleIElementType
@@ -101,6 +103,16 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
                 LPCParser.RULE_function_pointer,
                 LPCParser.RULE_function_name -> return FunctionRef(this)
                 LPCParser.RULE_function_prototype -> return FunctionPrototypeRef(this)
+                else -> {
+                    // Immediate context is ambiguous, so we shoot into the dark a bit
+                    PsiTreeUtil.getParentOfType(this, ExpressionSubtree::class.java)?.let { expNode ->
+                        PsiTreeUtil.getParentOfType(expNode, VarDefSubtree::class.java)?.let { defNode ->
+                            if (defNode.lpcType == LPCConstants.TYPE_FUNCTION) {
+                                return FunctionRef(this)
+                            }
+                        }
+                    }
+                }
             }
         }
         return null
@@ -113,9 +125,8 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
         val prev: ASTNode = node.treePrev
         val next: ASTNode = node.treeNext
         parentNode.removeChild(node)
-        if ((prev == null || prev.elementType === LPCParserDefinition.WHITESPACE) &&
-            next != null && next.getElementType() === LPCParserDefinition.WHITESPACE
-        ) {
+        if (prev.elementType === LPCParserDefinition.WHITESPACE &&
+            next.elementType === LPCParserDefinition.WHITESPACE) {
             parentNode.removeChild(next)
         }
     }

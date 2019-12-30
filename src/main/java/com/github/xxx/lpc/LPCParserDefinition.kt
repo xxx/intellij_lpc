@@ -1,10 +1,10 @@
 package com.github.xxx.lpc
 
-import com.github.xxx.lpc.psi.ArgDefSubtree
 import com.github.xxx.lpc.psi.BlockSubtree
 import com.github.xxx.lpc.psi.CallSubtree
 import com.github.xxx.lpc.psi.ExpressionSubtree
 import com.github.xxx.lpc.psi.FunctionImplementationSubtree
+import com.github.xxx.lpc.psi.FunctionPointerSubtree
 import com.github.xxx.lpc.psi.FunctionPrototypeSubtree
 import com.github.xxx.lpc.psi.LPCPSIFileRoot
 import com.github.xxx.lpc.psi.VarDefSubtree
@@ -104,14 +104,14 @@ class LPCParserDefinition : ParserDefinition {
         return when (elType.ruleIndex) {
             LPCParser.RULE_function_prototype -> FunctionPrototypeSubtree(node)
             LPCParser.RULE_function_implementation -> FunctionImplementationSubtree(node, ID)
-            LPCParser.RULE_new_name,
-            LPCParser.RULE_single_new_local_def,
-            LPCParser.RULE_single_new_local_def_with_init,
-            LPCParser.RULE_new_local_def  -> VarDefSubtree(node, ID)
-            LPCParser.RULE_argument_definition -> ArgDefSubtree(node, ID)
+            LPCParser.RULE_argument_definition,
+            LPCParser.RULE_local_variable_definition,
+            LPCParser.RULE_global_variable_definition -> VarDefSubtree(node, ID)
             LPCParser.RULE_block -> BlockSubtree(node)
             LPCParser.RULE_function_call -> CallSubtree(node)
             LPCParser.RULE_expr4 -> ExpressionSubtree(node)
+            LPCParser.RULE_function_arrow_pointer,
+            LPCParser.RULE_function_pointer -> FunctionPointerSubtree(node)
             else -> ANTLRPsiNode(node)
         }
     }
