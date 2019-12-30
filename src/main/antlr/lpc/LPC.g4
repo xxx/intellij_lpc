@@ -750,6 +750,7 @@ expr4
 //    |   expr4 LeftBracket '<' comma_expr Range comma_expr RightBracket
 //    |   expr4 LeftBracket '<' comma_expr Range '<' comma_expr RightBracket
     |   expr4 LeftBracket comma_expr Range RightBracket
+    |   expr4 LeftBracket Range comma_expr RightBracket
 //    |   expr4 LeftBracket '<' comma_expr Range RightBracket
 //    |   expr4 LeftBracket '<' comma_expr RightBracket
     |   expr4 LeftBracket comma_expr RightBracket
