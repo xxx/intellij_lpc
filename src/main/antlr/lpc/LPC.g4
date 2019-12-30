@@ -632,7 +632,7 @@ new_name
 
 expr0
     :   expr4 assign expr0
-    |   expr0 Compose expr0
+    |<assoc=right>   expr0 Compose expr0
     |   expr0 Question expr0 Colon expr0
     |   expr0 OrOr expr0
     |   expr0 AndAnd expr0
@@ -676,6 +676,7 @@ pointer_operator
     |   NotEqual
     |   OperatorIndex
     |   Plus
+    |   Plus
     |   '-'
     |   '*'
     |   '/'
@@ -685,8 +686,9 @@ pointer_operator
     |   And
     |   OrOr
     |   AndAnd
-    |   Great
-    |   Less
+    |   Compare
+    |   RightShift
+    |   LeftShift
     ;
 
 OperatorIndex
@@ -741,7 +743,7 @@ expr4
 
 //    |   Parameter
 //    |   '$' LeftParen comma_expr RightParen
-    |   expr4 Arrow Identifier
+//    |   expr4 Arrow Identifier
 //    |   expr4 LeftBracket comma_expr Range '<' comma_expr RightBracket
     |   expr4 LeftBracket comma_expr Range comma_expr RightBracket
 //    |   expr4 LeftBracket '<' comma_expr Range comma_expr RightBracket
@@ -764,15 +766,19 @@ expr4
     |   mapping_open expr_list3 RightBracket RightParen
     |   array_open expr_list RightBrace RightParen
     |   function_pointer
+    |   expr4 function_arrow_pointer
     ;
 
 function_pointer
-    : Identifier
-    // Handle ambiguity for ([]) meaning either an empty mapping or using &operator([])
-    | And Operator mapping_empty LeftParen partial_expr_list RightParen
-    | And Operator LeftParen pointer_operator RightParen LeftParen partial_expr_list RightParen
-    | And Identifier LeftParen partial_expr_list RightParen
-    | And Arrow Identifier LeftParen partial_expr_list RightParen
+    :   Identifier
+    |   And Operator LeftParen pointer_operator RightParen LeftParen partial_expr_list RightParen
+    |   And Identifier LeftParen partial_expr_list RightParen
+    |   And expr4 Arrow Identifier LeftParen partial_expr_list RightParen
+    |   And Arrow Identifier LeftParen partial_expr_list RightParen
+    ;
+
+function_arrow_pointer
+    : Arrow Identifier
     ;
 
 partial_expr_list
