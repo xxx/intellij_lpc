@@ -16,7 +16,7 @@ class LPCParsingTest : ParsingTestCase("", "c", LPCParserDefinition()) {
     }
 
     override fun skipSpaces(): Boolean {
-        return false
+        return true
     }
 
     override fun includeRanges(): Boolean {
