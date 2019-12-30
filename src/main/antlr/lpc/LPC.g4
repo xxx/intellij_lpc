@@ -122,16 +122,13 @@ Compose
     ;
 
 BasicType
-//    :   'buffer'
     :   'float'
     |   'function'
     |   'int'
     |   'mapping'
     |   'mixed'
     |   'object'
-    // |   'status'
     |   'string'
-//    |   'object_tx'
     |   'void'
     ;
 
@@ -142,10 +139,6 @@ Break
 Catch
     :   'catch'
     ;
-
-//Class
-//    :   'class'
-//    ;
 
 Colon
     :   ':'
@@ -158,10 +151,6 @@ ColonColon
 Continue
     :   'continue'
     ;
-
-//DefinedName
-//    :   'foo'
-//    ;
 
 Efun
     :   'efun'
@@ -223,14 +212,6 @@ Operator
     :   'operator'
     ;
 
-//New
-//    :   'new'
-//    ;
-
-//ParseCommand
-//    :   'parse_command'
-//    ;
-
 Question
     :   '?'
     ;
@@ -238,10 +219,6 @@ Question
 Range
     :   '..'
     ;
-
-//SScanf
-//    :   'sscanf'
-//    ;
 
 // These make brace matching more difficult, as intellij doesn't know to
 // skip over the first char of a closing multi-char match when typing it
@@ -269,10 +246,6 @@ mapping_empty
 array_empty
     : array_open (Whitespace|Newline)* array_close
     ;
-
-//FunctionOpen
-//    :   LeftParen Whitespace* ':' {_input.LA(1) != ':'}?    // java
-//    ;
 
 LeftParen
     :   '('
@@ -310,10 +283,6 @@ Number
     :   IntegerConstant
     ;
 
-//Parameter
-//    :   '$' DigitSequence
-//    ;
-
 /* Pre processing */
 ComplexDefine
     :   '#' Whitespace* 'define' (~[\\\r\n] | '\\\\' '\r'? '\n' | '\\'. )*
@@ -342,9 +311,7 @@ Real
 fragment
 FractionalConstant
     :   DigitSequence? '.' DigitSequence
-    // |   DigitSequence '.'   {self._input.LA(1) != ord('.')}? // python
     |   DigitSequence '.'   {_input.LA(1) != '.'}?    // java
-    // |   DigitSequence '.'   {_input->LA(1) != '.'}?    // c++
     ;
 
 DigitSequence
@@ -378,19 +345,10 @@ Digit
 
 fragment
 IntegerConstant
-//    :   DecimalConstant IntegerSuffix?
-//    |   OctalConstant IntegerSuffix?
-//    |   HexadecimalConstant IntegerSuffix?
     :   DecimalConstant
     |   OctalConstant
     |   HexadecimalConstant
-//    |   BinaryConstant
     ;
-
-//fragment
-//BinaryConstant
-//    :   '0' [bB] [0-1]+
-//    ;
 
 fragment
 DecimalConstant
@@ -427,37 +385,9 @@ HexadecimalDigit
     :   [0-9a-fA-F]
     ;
 
-//fragment
-//IntegerSuffix
-//    :   UnsignedSuffix LongSuffix?
-//    |   UnsignedSuffix LongLongSuffix
-//    |   LongSuffix UnsignedSuffix?
-//    |   LongLongSuffix UnsignedSuffix?
-//    ;
-
-//fragment
-//UnsignedSuffix
-//    :   [uU]
-//    ;
-//
-//fragment
-//LongSuffix
-//    :   [lL]
-//    ;
-//
-//fragment
-//LongLongSuffix
-//    :   'll' | 'LL'
-//    ;
-
 String
-//    :   StringPrefix? '"' SCharSequence? '"'
     :   '"' SCharSequence? '"'
     ;
-
-//StringPrefix
-//    :   '@'
-//    ;
 
 CharacterConstant
     :   '\'' SingleChar? '\''
@@ -521,11 +451,6 @@ SimpleEscapeSequence
     |   '\\' [^+.[{}\]!@#$%&*()_=\-|/<>]    // WTF: LPC escapes these characters (inface, only warn in lpc)
     ;
 
-//TimeExpression
-//    :   'time_expression'
-//    ;
-
-
 BlockComment
     :   '/*' .*? '*/'
         -> channel(HIDDEN)
@@ -571,8 +496,6 @@ definition
     :   global_variable_definition
     |   function_definition
     |   inheritance
-//    |   type_decl
-//    |   modifier_change
     |   preprocessor_directive
     ;
 
@@ -589,32 +512,10 @@ function_prototype
     :   data_type optional_star Identifier LeftParen argument RightParen SemiColon
     ;
 
-//modifier_change
-//    :   type_modifier_list ':'
-//    ;
-
 type_modifier_list
     :   /* empty */
     |   TypeModifier type_modifier_list
     ;
-
-//type_decl
-//    :   type_modifier_list Class identifier LeftBrace member_list RightBrace
-//    ;
-
-//member_list
-//    :   /* empty */
-//    |   member_list data_type member_name_list SemiColon
-//    ;
-
-//member_name_list
-//    :   member_name
-//    |   member_name Comma member_name_list
-//    ;
-
-//member_name
-//    :   optional_star identifier
-//    ;
 
 global_variable_definition
     :   data_type name_list SemiColon
@@ -642,7 +543,6 @@ expr0
     |   expr0 Equal expr0
     |   expr0 NotEqual expr0
     |   expr0 Compare expr0
-//    |   expr0 '<' expr0
     |   expr0 LeftShift expr0
     |   expr0 RightShift expr0
 
@@ -659,9 +559,6 @@ expr0
     |   expr4 MinusMinus
     |   expr4
 
-//    |   sscanf
-//    |   parse_command
-//    |   time_expression
     |   Number
     |   Real
     ;
@@ -695,27 +592,10 @@ OperatorIndex
     : '[]'
     ;
 
-//time_expression
-//    :   TimeExpression expr_or_block
-//    ;
-
-//expr_or_block
-//    :   block
-//    |   LeftParen comma_expr RightParen
-//    ;
-
 comma_expr
     :   expr0
     |   comma_expr Comma expr0
     ;
-
-//parse_command
-//    :   ParseCommand LeftParen expr0 Comma expr0 Comma expr0 lvalue_list RightParen
-//    ;
-//
-//sscanf
-//    :   SScanf LeftParen expr0 Comma expr0 lvalue_list RightParen
-//    ;
 
 lvalue_list
     :   /* empty */
@@ -726,42 +606,19 @@ cast
     :   LeftParen BasicType optional_star RightParen
     ;
 
-//basic_type
-//    :   BasicType
-//    :   atomic_type
-//    ;
-
-//atomic_type
-//    :   BasicType
-//    |   Class DefinedName
-//    ;
-
 expr4
     :   function_call
     |   expr4 function_arrow_call
-//    |   DefinedName
     |   Identifier
 
-//    |   Parameter
-//    |   '$' LeftParen comma_expr RightParen
-//    |   expr4 Arrow Identifier
-//    |   expr4 LeftBracket comma_expr Range '<' comma_expr RightBracket
     |   expr4 LeftBracket comma_expr Range comma_expr RightBracket
-//    |   expr4 LeftBracket '<' comma_expr Range comma_expr RightBracket
-//    |   expr4 LeftBracket '<' comma_expr Range '<' comma_expr RightBracket
     |   expr4 LeftBracket comma_expr Range RightBracket
     |   expr4 LeftBracket Range comma_expr RightBracket
-//    |   expr4 LeftBracket '<' comma_expr Range RightBracket
-//    |   expr4 LeftBracket '<' comma_expr RightBracket
     |   expr4 LeftBracket comma_expr RightBracket
     |   string
     |   CharacterConstant
     |   LeftParen comma_expr RightParen
     |   catch_statement
-//    |   BasicType LeftParen argument RightParen block
-//    |   L_NEW_FUNCTION_OPEN ':' RightParen
-//    |   L_NEW_FUNCTION_OPEN Comma expr_list2 ':' RightParen
-//    |   FunctionOpen comma_expr ':' RightParen
 
     |   mapping_empty
     |   array_empty
@@ -800,7 +657,6 @@ partial_expr_list_node
     ;
 
 catch_statement
-//    :   Catch expr_or_block
     :   Catch LeftParen comma_expr RightParen
     ;
 
@@ -853,12 +709,8 @@ string_con1
 // combine into expr4
 function_call
     :   efun_override LeftParen expr_list RightParen
-//    |   New LeftParen expr_list RightParen
-//    |   New LeftParen Class DefinedName opt_class_init RightParen
-//    |   DefinedName LeftParen expr_list RightParen
     |   function_name_call  //function_name LeftParen expr_list RightParen
     |   function_arrow_call //expr4 Arrow identifier LeftParen expr_list RightParen
-//    |   LeftParen '*' comma_expr RightParen LeftParen expr_list RightParen
     ;
 
 function_name_call
@@ -872,22 +724,11 @@ function_arrow_call
 function_name
     :   Identifier
     |   ColonColon Identifier
-//    |   BasicType ColonColon Identifier
     |   Identifier ColonColon Identifier
     ;
 
-//opt_class_init
-//    :   /* empty */
-//    |   opt_class_init Comma class_init
-//    ;
-//
-//class_init
-//    :   Identifier ':' expr0
-//    ;
-
 efun_override
     :   Efun ColonColon Identifier
-//    |   Efun ColonColon New
     ;
 
 block
@@ -921,11 +762,6 @@ new_local_def
     |   optional_star Identifier StrictAssign expr0
     ;
 
-//new_local_name
-//    :   Identifier
-//    |   DefinedName
-//    ;
-
 statement
     :   comma_expr SemiColon
     |   cond
@@ -934,7 +770,6 @@ statement
     |   switch_statement
     |   return_statement
 
-    // decl_block
     |   block
     |   for_loop
     |   foreach_loop
@@ -1004,33 +839,14 @@ constant
     |   '~' Number
     ;
 
-//decl_block
-//    :
-//    |   block
-//    |   for_loop
-//    |   foreach_loop
-//    ;
-
 foreach_loop
-//    :   Foreach LeftParen foreach_vars In expr0 RightParen statement
     :   Foreach LeftParen single_new_local_def ':' expr0 RightParen statement
     |   Foreach LeftParen single_new_local_def Comma single_new_local_def ':' expr0 RightParen statement
     ;
 
-//foreach_vars
-//    :   foreach_var
-//    |   foreach_var Comma foreach_var
-//    ;
-
 for_loop
     :   For LeftParen first_for_expr SemiColon for_expr SemiColon for_expr RightParen statement
     ;
-
-//foreach_var
-//    :   DefinedName
-//    |   single_new_local_def
-//    |   Identifier
-//    ;
 
 first_for_expr
     :   for_expr
@@ -1087,8 +903,6 @@ optional_arg_assignment
     ;
 
 inheritance
-//    :   type_modifier_list Inherit string_con1 SemiColon
-//    |   type_modifier_list Inherit string_con1 Identifier SemiColon
     :   Inherit string_con1 SemiColon
     |   Inherit string_con1 Identifier SemiColon
     ;
@@ -1107,8 +921,3 @@ optional_star
     :   /* empty */
     |   '*'
     ;
-
-//identifier
-//    :   DefinedName
-//    :   Identifier
-//    ;
