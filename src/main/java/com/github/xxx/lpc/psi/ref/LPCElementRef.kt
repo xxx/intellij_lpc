@@ -1,5 +1,6 @@
-package com.github.xxx.lpc.psi
+package com.github.xxx.lpc.psi.ref
 
+import com.github.xxx.lpc.psi.IdentifierPSINode
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner

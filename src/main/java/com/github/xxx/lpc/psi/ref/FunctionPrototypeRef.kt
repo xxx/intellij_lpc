@@ -1,5 +1,7 @@
-package com.github.xxx.lpc.psi
+package com.github.xxx.lpc.psi.ref
 
+import com.github.xxx.lpc.psi.FunctionImplementationSubtree
+import com.github.xxx.lpc.psi.IdentifierPSINode
 import com.intellij.psi.PsiElement
 
 /**

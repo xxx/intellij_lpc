@@ -1,9 +1,8 @@
-package com.github.xxx.lpc.psi
+package com.github.xxx.lpc.psi.ref
 
-import com.github.xxx.lpc.LPCLanguage
+import com.github.xxx.lpc.psi.FunctionImplementationSubtree
+import com.github.xxx.lpc.psi.IdentifierPSINode
 import com.intellij.psi.PsiElement
-import com.intellij.util.containers.toArray
-import org.antlr.intellij.adaptor.xpath.XPath
 
 /** A reference object associated with (referring to) a IdentifierPSINode
  * underneath a CallSubtree root.

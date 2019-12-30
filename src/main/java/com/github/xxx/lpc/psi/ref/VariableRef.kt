@@ -1,5 +1,7 @@
-package com.github.xxx.lpc.psi
+package com.github.xxx.lpc.psi.ref
 
+import com.github.xxx.lpc.psi.IdentifierPSINode
+import com.github.xxx.lpc.psi.VarDefSubtree
 import com.intellij.psi.PsiElement
 
 class VariableRef(element: IdentifierPSINode) : LPCElementRef(element) {

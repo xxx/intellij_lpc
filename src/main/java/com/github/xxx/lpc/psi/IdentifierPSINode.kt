@@ -3,6 +3,9 @@ package com.github.xxx.lpc.psi
 import com.github.xxx.lpc.LPCConstants
 import com.github.xxx.lpc.LPCLanguage
 import com.github.xxx.lpc.LPCParserDefinition
+import com.github.xxx.lpc.psi.ref.FunctionPrototypeRef
+import com.github.xxx.lpc.psi.ref.FunctionRef
+import com.github.xxx.lpc.psi.ref.VariableRef
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
@@ -102,7 +105,9 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
                 LPCParser.RULE_statement -> return VariableRef(this)
                 LPCParser.RULE_function_pointer,
                 LPCParser.RULE_function_name -> return FunctionRef(this)
-                LPCParser.RULE_function_prototype -> return FunctionPrototypeRef(this)
+                LPCParser.RULE_function_prototype -> return FunctionPrototypeRef(
+                    this
+                )
                 else -> {
                     // Immediate context is ambiguous, so we shoot into the dark a bit
                     PsiTreeUtil.getParentOfType(this, ExpressionSubtree::class.java)?.let { expNode ->
