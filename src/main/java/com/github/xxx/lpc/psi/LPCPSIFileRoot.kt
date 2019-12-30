@@ -31,9 +31,7 @@ class LPCPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
         }
     }
 
-    /** Return null since a file scope has no enclosing scope. It is
-     * not itself in a scope.
-     */
+    // TODO - try to resolve for each file inherited from
     override fun getContext(): ScopeNode? {
         return null
     }
