@@ -13,7 +13,7 @@ import org.antlr.intellij.adaptor.xpath.XPath
  * being declared at once. There will be one of these nodes per name,
  * but only a single VarDefSubtree for the entire list.
  */
-class VarNameDeclSubtree(node: ASTNode, idElementTyp: IElementType) : IdentifierDefSubtree(node, idElementTyp) {
+open class VarNameDeclSubtree(node: ASTNode, idElementTyp: IElementType) : IdentifierDefSubtree(node, idElementTyp) {
     override fun getNameIdentifier(): PsiElement? {
         val ids : Collection<PsiElement?> = XPath.findAll(
             LPCLanguage.INSTANCE, this,

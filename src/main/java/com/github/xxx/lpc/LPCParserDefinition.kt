@@ -9,6 +9,7 @@ import com.github.xxx.lpc.psi.FunctionPrototypeSubtree
 import com.github.xxx.lpc.psi.LPCPSIFileRoot
 import com.github.xxx.lpc.psi.VarDefSubtree
 import com.github.xxx.lpc.psi.VarNameDeclSubtree
+import com.github.xxx.lpc.psi.InheritSubtree
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.lang.PsiParser
@@ -109,12 +110,18 @@ class LPCParserDefinition : ParserDefinition {
             LPCParser.RULE_single_new_local_def,
             LPCParser.RULE_new_local_def -> VarNameDeclSubtree(node, ID)
 
+            LPCParser.RULE_inheritance -> InheritSubtree(node, ID)
+
             LPCParser.RULE_argument_definition,
             LPCParser.RULE_local_variable_definition,
             LPCParser.RULE_global_variable_definition -> VarDefSubtree(node)
+
             LPCParser.RULE_block -> BlockSubtree(node)
+
             LPCParser.RULE_function_call -> CallSubtree(node)
+
             LPCParser.RULE_expr4 -> ExpressionSubtree(node)
+
             LPCParser.RULE_function_arrow_pointer,
             LPCParser.RULE_function_pointer -> FunctionPointerSubtree(node)
             else -> ANTLRPsiNode(node)

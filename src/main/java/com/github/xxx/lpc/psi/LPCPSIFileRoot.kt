@@ -11,6 +11,7 @@ import org.antlr.intellij.adaptor.psi.ScopeNode
 import com.github.xxx.lpc.LPCIcons
 import com.github.xxx.lpc.LPCLanguage
 import com.intellij.psi.util.PsiTreeUtil
+import org.antlr.intellij.adaptor.xpath.XPath
 import javax.swing.Icon
 
 class LPCPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, LPCLanguage.INSTANCE), ScopeNode {
@@ -37,10 +38,25 @@ class LPCPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
     }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        return if (PsiTreeUtil.getParentOfType(element, CallSubtree::class.java) != null ||
-            PsiTreeUtil.getParentOfType(element, FunctionPrototypeSubtree::class.java) != null ||
-            PsiTreeUtil.getParentOfType(element, FunctionPointerSubtree::class.java) != null) {
+        val callSubtree = PsiTreeUtil.getParentOfType(element, CallSubtree::class.java)
+        return if (callSubtree != null) {
+            if (callSubtree.namespace != null) {
+                /*
+                    Inheritance namespaces can only be defined within file's global namespace,
+                    so only check there, and do not attempt to walk up the inheritance chain.
+                    Additionally, namespaces and variables are not shared, so it's valid LPC to
+                    have a variable with the same name as an inheritance namespace.
+                */
+                val nodes = XPath.findAll(LPCLanguage.INSTANCE, this, "//inheritance/Identifier")
 
+                return nodes.find {
+                    it.text == callSubtree.namespace
+                }
+            } else {
+                resolveFunctionId(element)
+            }
+        } else if (PsiTreeUtil.getParentOfType(element, FunctionPrototypeSubtree::class.java) != null ||
+            PsiTreeUtil.getParentOfType(element, FunctionPointerSubtree::class.java) != null) {
             resolveFunctionId(element)
         } else if (PsiTreeUtil.getParentOfType(element, ExpressionSubtree::class.java) != null) {
             resolveFunctionId(element) ?: resolveVarId(element)

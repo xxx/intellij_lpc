@@ -724,7 +724,11 @@ function_arrow_call
 function_name
     :   Identifier
     |   ColonColon Identifier
-    |   Identifier ColonColon Identifier
+    |   function_call_namespace ColonColon Identifier
+    ;
+
+function_call_namespace
+    : Identifier
     ;
 
 efun_override

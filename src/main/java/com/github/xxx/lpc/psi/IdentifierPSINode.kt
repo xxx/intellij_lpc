@@ -5,6 +5,7 @@ import com.github.xxx.lpc.LPCLanguage
 import com.github.xxx.lpc.LPCParserDefinition
 import com.github.xxx.lpc.psi.ref.FunctionPrototypeRef
 import com.github.xxx.lpc.psi.ref.FunctionRef
+import com.github.xxx.lpc.psi.ref.InheritNamespaceRef
 import com.github.xxx.lpc.psi.ref.VariableRef
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
@@ -107,6 +108,8 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
                 LPCParser.RULE_argument_definition,
                 LPCParser.RULE_single_new_local_def,
                 LPCParser.RULE_new_local_def -> return null
+
+                LPCParser.RULE_function_call_namespace -> return InheritNamespaceRef(this)
 
                 LPCParser.RULE_efun_override,
                 LPCParser.RULE_function_arrow_pointer,

@@ -47,7 +47,7 @@ abstract class LPCElementRef(element: IdentifierPSINode) :
 
         var myDef = def
         val refName = myElement!!.name
-        System.out.println(KClass::class.simpleName+".isReferenceTo("+refName+"->"+def.text +")")
+        // System.out.println(KClass::class.simpleName+".isReferenceTo("+refName+"->"+def.text +")")
         // sometimes def comes in pointing to ID node itself. depends on what you click on
         if (myDef is IdentifierPSINode) {
             val defSubtree = findDefSubtree(myDef.parent)
@@ -61,7 +61,7 @@ abstract class LPCElementRef(element: IdentifierPSINode) :
             return refName != null && refName == defName
         }
 
-        println("We're here returning false?")
+        // println("We're here returning false?")
         return false
     }
 
