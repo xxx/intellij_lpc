@@ -49,6 +49,7 @@ class LPCPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
                 */
                 val nodes = XPath.findAll(LPCLanguage.INSTANCE, this, "//inheritance/Identifier")
 
+                // TODO: handle namespaced functions themselves. They resolve to the namespace at the moment.
                 return nodes.find {
                     it.text == callSubtree.namespace
                 }

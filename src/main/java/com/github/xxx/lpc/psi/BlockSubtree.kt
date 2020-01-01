@@ -15,7 +15,7 @@ class BlockSubtree(node: ASTNode) : ANTLRPsiNode(node), ScopeNode {
         //		                   " at "+Integer.toHexString(element.hashCode())+")");\
         return SymtabUtils.resolve(
             this, LPCLanguage.INSTANCE,
-            element, "/block/statements/local_variable_definition//new_local_def/Identifier"
+            element, "/block/statements//local_variable_definition//new_local_def/Identifier"
         )
     }
 }

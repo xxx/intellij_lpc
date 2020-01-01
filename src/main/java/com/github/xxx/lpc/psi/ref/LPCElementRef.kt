@@ -7,7 +7,6 @@ import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.PsiReferenceBase
 import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.psi.ScopeNode
-import kotlin.reflect.KClass
 
 abstract class LPCElementRef(element: IdentifierPSINode) :
     PsiReferenceBase<IdentifierPSINode?>(element, TextRange(0, element.text.length)) {
