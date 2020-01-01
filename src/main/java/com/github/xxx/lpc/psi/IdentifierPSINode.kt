@@ -102,12 +102,19 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
         // do not return a reference for the ID nodes in a definition
         if (elType is RuleIElementType) {
             when (elType.ruleIndex) {
-                LPCParser.RULE_statement -> return VariableRef(this)
+                LPCParser.RULE_inheritance,
+                LPCParser.RULE_new_name,
+                LPCParser.RULE_argument_definition,
+                LPCParser.RULE_single_new_local_def,
+                LPCParser.RULE_new_local_def -> return null
+
+                LPCParser.RULE_efun_override,
+                LPCParser.RULE_function_arrow_pointer,
                 LPCParser.RULE_function_pointer,
+                LPCParser.RULE_function_arrow_call,
                 LPCParser.RULE_function_name -> return FunctionRef(this)
-                LPCParser.RULE_function_prototype -> return FunctionPrototypeRef(
-                    this
-                )
+
+                LPCParser.RULE_function_prototype -> return FunctionPrototypeRef(this)
                 else -> {
                     // Immediate context is ambiguous, so we shoot into the dark a bit
                     PsiTreeUtil.getParentOfType(this, ExpressionSubtree::class.java)?.let { expNode ->
@@ -116,6 +123,8 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
                                 return FunctionRef(this)
                             }
                         }
+
+                        return VariableRef(this)
                     }
                 }
             }

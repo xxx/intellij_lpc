@@ -892,9 +892,8 @@ argument_list
     ;
 
 argument_definition
-    :   BasicType optional_star optional_arg_assignment
-    |   BasicType optional_star Identifier optional_arg_assignment
-    |   Identifier optional_arg_assignment
+    :   BasicType optional_star
+    |   single_new_local_def optional_arg_assignment
     ;
 
 optional_arg_assignment
