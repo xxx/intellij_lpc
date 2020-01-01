@@ -26,6 +26,9 @@ class FunctionImplementationSubtree(node: ASTNode, idElementType: IElementType) 
         return SymtabUtils.resolve(
             this, LPCLanguage.INSTANCE,
             element, "//function_implementation/Identifier"
+        ) ?: SymtabUtils.resolve(
+            this, LPCLanguage.INSTANCE,
+            element, "//function_implementation/argument//Identifier"
         )
     }
 
