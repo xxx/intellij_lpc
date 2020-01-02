@@ -3,6 +3,9 @@ package com.github.xxx.lpc.psi.ref
 import com.github.xxx.lpc.psi.IdentifierPSINode
 import com.github.xxx.lpc.psi.InheritSubtree
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.CachedValueProvider
+import com.intellij.psi.util.CachedValuesManager
+import com.intellij.psi.util.PsiModificationTracker
 import org.antlr.intellij.adaptor.psi.ScopeNode
 
 class InheritNamespaceRef(element: IdentifierPSINode) : LPCElementRef(element) {
@@ -11,8 +14,10 @@ class InheritNamespaceRef(element: IdentifierPSINode) : LPCElementRef(element) {
     }
 
     override fun resolve(): PsiElement? {
-        // Inheritance namespaces can only be defined at the file level, so skip interim scopes.
-        val scope = myElement!!.containingFile as ScopeNode? ?: return null
-        return scope.resolve(myElement)
+        return CachedValuesManager.getCachedValue(myElement as PsiElement) {
+            // Inheritance namespaces can only be defined at the file level, so skip interim scopes.
+            val result = (myElement.containingFile as ScopeNode?)?.resolve(myElement)
+            CachedValueProvider.Result.create(result, PsiModificationTracker.MODIFICATION_COUNT)
+        }
     }
 }

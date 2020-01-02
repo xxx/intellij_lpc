@@ -5,12 +5,15 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.PsiReferenceBase
+import com.intellij.psi.util.CachedValueProvider
+import com.intellij.psi.util.CachedValuesManager
+import com.intellij.psi.util.PsiModificationTracker
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.psi.ScopeNode
 
 abstract class LPCElementRef(element: IdentifierPSINode) :
-    PsiReferenceBase<IdentifierPSINode?>(element, TextRange(0, element.text.length)) {
+    PsiReferenceBase<IdentifierPSINode?>(element, TextRange(0, element.textLength)) {
     override fun getVariants(): Array<Any> {
         @Suppress("UNCHECKED_CAST")
         return arrayOfNulls<Any>(0) as Array<Any>
@@ -38,8 +41,10 @@ abstract class LPCElementRef(element: IdentifierPSINode) :
         //		System.out.println(getClass().getSimpleName()+
 //		                   ".resolve("+myElement.getName()+
 //		                   " at "+Integer.toHexString(myElement.hashCode())+")");
-        val scope = myElement!!.context as ScopeNode? ?: return null
-        return scope.resolve(myElement)
+        return CachedValuesManager.getCachedValue(myElement as PsiElement) {
+            val result = (myElement.context as ScopeNode?)?.resolve(myElement)
+            CachedValueProvider.Result.create(result, PsiModificationTracker.MODIFICATION_COUNT)
+        }
     }
 
     override fun isReferenceTo(def: PsiElement): Boolean {
