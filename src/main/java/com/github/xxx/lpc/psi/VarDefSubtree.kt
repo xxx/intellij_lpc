@@ -15,6 +15,7 @@ import org.antlr.intellij.adaptor.psi.ANTLRPsiNode
 class VarDefSubtree(node: ASTNode) : ANTLRPsiNode(node) {
     val lpcType : String
         get() = CachedValuesManager.getCachedValue(this) {
+            // TODO arrays
             val nodes = XPath.findAll(LPCLanguage.INSTANCE, this, "//BasicType")
 
             val lpcType = if (nodes.isNotEmpty()) {
