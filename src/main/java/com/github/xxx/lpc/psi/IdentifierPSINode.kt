@@ -57,15 +57,9 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
             }
 
             val theType = when {
-                PsiTreeUtil.getParentOfType(elm, VarNameDeclSubtree::class.java) != null -> {
-                    "Variable"
-                }
-                PsiTreeUtil.getParentOfType(elm, FunctionImplementationSubtree::class.java) != null -> {
-                    "Function"
-                }
-                else -> {
-                    "ID"
-                }
+                PsiTreeUtil.getParentOfType(elm, VarNameDeclSubtree::class.java) != null -> "Variable"
+                PsiTreeUtil.getParentOfType(elm, FunctionImplementationSubtree::class.java) != null -> "Function"
+                else ->  "ID"
             }
 
             CachedValueProvider.Result.create(theType, PsiModificationTracker.MODIFICATION_COUNT)
