@@ -14,6 +14,9 @@ import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.impl.PsiFileFactoryImpl
 import com.intellij.psi.tree.IElementType
+import com.intellij.psi.util.CachedValueProvider
+import com.intellij.psi.util.CachedValuesManager
+import com.intellij.psi.util.PsiModificationTracker
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.IncorrectOperationException
 import lpc.LPCParser
@@ -42,6 +45,32 @@ import org.jetbrains.annotations.NonNls
  */
 class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeafNode(type, text),
     PsiNamedElement {
+    val usageType : String
+        get() = CachedValuesManager.getCachedValue(this) {
+            var elm = this
+            reference?.let { ref ->
+                ref.resolve()?.let {
+                    if (it is IdentifierPSINode) {
+                        elm = it
+                    }
+                }
+            }
+
+            val theType = when {
+                PsiTreeUtil.getParentOfType(elm, VarNameDeclSubtree::class.java) != null -> {
+                    "Variable"
+                }
+                PsiTreeUtil.getParentOfType(elm, FunctionImplementationSubtree::class.java) != null -> {
+                    "Function"
+                }
+                else -> {
+                    "ID"
+                }
+            }
+
+            CachedValueProvider.Result.create(theType, PsiModificationTracker.MODIFICATION_COUNT)
+        }
+
     override fun getName(): String? {
         return text
     }

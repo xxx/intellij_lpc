@@ -1,6 +1,6 @@
 package com.github.xxx.lpc
 
-import com.github.xxx.lpc.psi.FunctionImplementationSubtree
+import com.github.xxx.lpc.psi.IdentifierPSINode
 import com.intellij.lang.HelpID
 import com.intellij.lang.findUsages.FindUsagesProvider
 import com.intellij.openapi.util.text.StringUtil
@@ -19,9 +19,9 @@ class LPCFindUsagesProvider : FindUsagesProvider {
     }
 
     override fun getType(element: PsiElement): String {
-        return if (element is FunctionImplementationSubtree) {
-            "Function"
-        } else "thinger"
+        return if (element is IdentifierPSINode) {
+            element.usageType
+        } else "ID"
     }
 
     override fun getHelpId(psiElement: PsiElement): String? {
