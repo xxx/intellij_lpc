@@ -29,6 +29,6 @@ class LPCFindUsagesProvider : FindUsagesProvider {
     }
 
     override fun canFindUsagesFor(psiElement: PsiElement): Boolean {
-        return psiElement is PsiNamedElement;
+        return psiElement is PsiNamedElement
     }
 }
