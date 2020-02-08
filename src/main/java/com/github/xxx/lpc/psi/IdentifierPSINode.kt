@@ -65,7 +65,7 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
         }
 
     override fun getUseScope(): SearchScope {
-        val ctx = (if (reference != null) reference?.resolve()?.context else context) ?: return super.getUseScope()
+        val ctx = reference?.resolve()?.context ?: context ?: return super.getUseScope()
 
         return if (ctx is BlockSubtree) {
             LocalSearchScope(ctx)
