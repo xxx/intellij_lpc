@@ -11,7 +11,6 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiNameIdentifierOwner
-import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.impl.PsiFileFactoryImpl
 import com.intellij.psi.search.LocalSearchScope
@@ -44,7 +43,7 @@ import org.jetbrains.annotations.NonNls
  * of this type.
  */
 class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeafNode(type, text),
-    PsiNamedElement, PsiNameIdentifierOwner {
+    PsiNameIdentifierOwner {
     val usageType : String
         get() = CachedValuesManager.getCachedValue(this) {
             var elm = this
