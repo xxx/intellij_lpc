@@ -7,6 +7,8 @@ import com.intellij.lang.ASTNode
 import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
+import com.intellij.psi.search.LocalSearchScope
+import com.intellij.psi.search.SearchScope
 import com.intellij.psi.tree.IElementType
 import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
@@ -49,5 +51,13 @@ class FunctionImplementationSubtree(node: ASTNode, idElementType: IElementType) 
             LPCIcons.C_FILE,
             null
         )
+    }
+
+    override fun getUseScope(): SearchScope {
+        return if (context != null) {
+            LocalSearchScope(context!!)
+        } else {
+            super.getUseScope()
+        }
     }
 }

@@ -3,6 +3,8 @@ package com.github.xxx.lpc.psi
 import com.github.xxx.lpc.LPCLanguage
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
+import com.intellij.psi.search.LocalSearchScope
+import com.intellij.psi.search.SearchScope
 import com.intellij.psi.tree.IElementType
 import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.xpath.XPath
@@ -23,5 +25,13 @@ open class VarNameDeclSubtree(node: ASTNode, idElementTyp: IElementType) : Ident
         }
 
         return null
+    }
+
+    override fun getUseScope(): SearchScope {
+        return if (context != null) {
+            LocalSearchScope(context!!)
+        } else {
+            super.getUseScope()
+        }
     }
 }

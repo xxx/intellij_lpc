@@ -10,9 +10,12 @@ import com.github.xxx.lpc.psi.ref.VariableRef
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
+import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.impl.PsiFileFactoryImpl
+import com.intellij.psi.search.LocalSearchScope
+import com.intellij.psi.search.SearchScope
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
@@ -37,14 +40,11 @@ import org.jetbrains.annotations.NonNls
  * in the AST factory with which you could decide whether this node
  * is a definition or a reference.
  *
- * PsiNameIdentifierOwner (vs PsiNamedElement) implementations are the
- * corresponding subtree roots that define symbols.
- *
  * You can click on an ID in the editor and ask for a rename for any node
  * of this type.
  */
 class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeafNode(type, text),
-    PsiNamedElement {
+    PsiNamedElement, PsiNameIdentifierOwner {
     val usageType : String
         get() = CachedValuesManager.getCachedValue(this) {
             var elm = this
@@ -64,6 +64,21 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
 
             CachedValueProvider.Result.create(theType, PsiModificationTracker.MODIFICATION_COUNT)
         }
+
+    override fun getUseScope(): SearchScope {
+        val ctx = (if (reference != null) reference?.resolve()?.context else context) ?: return super.getUseScope()
+
+        return if (ctx is BlockSubtree) {
+            LocalSearchScope(ctx)
+        } else {
+            LocalSearchScope(containingFile)
+        }
+    }
+
+    // This needs to be here for in-place renaming
+    override fun getNameIdentifier(): PsiElement? {
+        return this
+    }
 
     override fun getName(): String? {
         return text
